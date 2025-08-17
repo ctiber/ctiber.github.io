@@ -1,0 +1,10 @@
+@InProceedings{KAL18,
+  Author = {Kallel, Sahar and Chouki Tibermacine and Hadj Kacem, Ahmed and Dony, Christophe},
+  Title = {Multi-paradigm Architecture Constraint Specification and Configuration Based on Graphs and Feature Models},
+  Booktitle = {Proceedings of the 44th International
+               Conference on Current Trends in Theory and Practice of Computer Science (SOFSEM'18),
+               Krems, Austria, January-February 2018},
+  Pages = {180--193},
+  Year = {2018},
+  Publisher = {Springer}
+}

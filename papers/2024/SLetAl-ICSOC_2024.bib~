@@ -1,0 +1,7 @@
+@InProceedings{VER24,
+author = {Jeisson Vergara-Vargas, Felipe Restrepo-Calle, Salah Sadou and Tibermacine, Chouki},
+title = {Sarch-Checks: A Method for Checking Software Architecture Security Properties using a Knowledge Graph},
+booktitle = {Proceedings of the 21st IEEE International Conference on Software Architecture (ICSA 2024), Hyderabad, India, June 4-8 2024},
+year = {2024},
+publisher = {Springer}
+}

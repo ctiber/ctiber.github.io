@@ -1,0 +1,6 @@
+@InProceedings{GEO21,
+  Author = {Georges, Thomas and Huchard, Marianne and König, Mélanie and Nebut, Clémentine and Tibermacine, Chouki},
+  Title = {Variability Extraction from Simulator I/O Data Schemata in Agriculture Decision-Support Software},
+  Booktitle = {Proceedings of the 9th Workshop (FCA4AI), co-located with IJCAI 2021, Montréal, Canada, August 2021. Virutal Event},
+  Year = {2021}
+}

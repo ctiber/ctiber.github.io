@@ -1,0 +1,7 @@
+B@InProceedings{VER23,
+author = {Jeisson Vergara-Vargas, Felipe Restrepo-Calle, Salah Sadou and Tibermacine, Chouki},
+title = {Sarch-Knows: A Knowledge Graph for Modeling Security Scenarios at the Software Architecture Level},
+booktitle = {3rd International Workshop on Designing and Measuring Security in Software Architectures (DeMeSSa) workshop, published in the companion proceedings of the 17th European Conference on Software Architecture (ECSA 2023), Istanbul, Turkey},
+year = {2023},
+publisher = {Springer}
+}

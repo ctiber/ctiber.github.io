@@ -1,0 +1,8 @@
+@InProceedings{TIB19,
+  Author = {Okba Tibermacine and Tibermacine, Chouki and Kerdoudi, Mohamed Lamine},
+  Title = {Reputation Evaluation with Malicious Feedback Prevention Using a HITS-Based
+Model},
+  Booktitle = {Proceedings of the IEEE International Conference on Web Services (ICWS'2019), Milan, Italy},
+  Year = {2019},
+  Publisher = {IEEE CS}
+}

@@ -1,0 +1,7 @@
+@InProceedings{KER19,
+  Author = {Kerdoudi, Mohamed Lamine, Ziadi, Tewfik, Tibermacine, Chouki and Sadou, Salah},
+  Title = {Recovering Software Architecture Product Lines},
+  Booktitle = {Proceedings of the 24th International Conference on Engineering of Complex Computer Systems (ICECCS'2019), November 2019. Hong Kong, China},
+  Year = {2019},
+  Publisher = {IEEE CS}
+}

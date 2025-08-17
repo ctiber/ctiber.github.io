@@ -1,0 +1,10 @@
+@Article{KER16,
+  Author = {Kerdoudi, Mohamed Lamine and Tibermacine, Chouki and Sadou, Salah},
+  Title = {Opening Web Applications for Third Party Development: a Service-Oriented Solution},
+  Journal = {Service-Oriented Computing and Applications},
+  Volume = {2},
+  Month = {February},
+  Year = {2016},
+  Pages = {1--27},
+  Publisher = {Springer}
+}

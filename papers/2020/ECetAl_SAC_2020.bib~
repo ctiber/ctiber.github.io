@@ -1,0 +1,7 @@
+@InProceedings{CHE20a,
+  Author = {Cherfa, Elyes and Kesraoui, Soraya and Tibermacine, Chouki and Fleurquin, R\'egis  and Sadou, Salah},
+  Title = {On investigating Metamodel Inaccurate Structures},
+  Booktitle = {Proceedings of the 35th ACM/SIGAPP Symposium On Applied Computing  (SAC'2020), Software Engineering Track, March-April 2020. Brno, Czech Republic},
+  Year = {2020},
+  Publisher = {ACM Press}
+}
