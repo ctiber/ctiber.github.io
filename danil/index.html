@@ -7,11 +7,13 @@
 <style>
   body {
     font-family: sans-serif;
-    background: #fafafa;
-    margin: 20px;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 20px;
   }
   h1 {
     text-align: center;
+    margin-bottom: 30px;
   }
   .gallery {
     display: grid;
@@ -26,909 +28,741 @@
     overflow: hidden;
     text-align: center;
     width: 200px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .card:hover {
+    transform: scale(1.03);
   }
   .card img {
     width: 100%;
     height: auto;
     display: block;
   }
-  .card a {
-    display: block;
+  .card div {
     padding: 8px;
-    text-decoration: none;
     color: #333;
+    font-size: 14px;
   }
-  .card a:hover {
-    background: #f0f0f0;
+
+  /* Lightbox overlay */
+  .lightbox {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  .lightbox img {
+    max-width: 90%;
+    max-height: 80vh;
+    border-radius: 10px;
+  }
+  .close, .prev, .next {
+    position: absolute;
+    color: white;
+    font-size: 2em;
+    cursor: pointer;
+    user-select: none;
+  }
+  .close {
+    top: 20px; right: 30px;
+  }
+  .prev {
+    left: 30px;
+  }
+  .next {
+    right: 30px;
+  }
+  .caption {
+    color: white;
+    margin-top: 10px;
+    text-align: center;
   }
 </style>
 </head>
 <body>
+
 <h1>Image Gallery</h1>
 <div class="gallery">
 
-  <div class="card">
-    <a href="S5009601.JPG">
-      <img src="S5009601.JPG" alt="S5009601.JPG">
-      <div>S5009601.JPG</div>
-    </a>
+  <div class="card" onclick="openLightbox(0)">
+    <img src="S5009601.JPG" alt="S5009601.JPG">
+    <div>S5009601.JPG</div>
   </div>
 
-  <div class="card">
-    <a href="S5009605.JPG">
-      <img src="S5009605.JPG" alt="S5009605.JPG">
-      <div>S5009605.JPG</div>
-    </a>
+  <div class="card" onclick="openLightbox(1)">
+    <img src="S5009605.JPG" alt="S5009605.JPG">
+    <div>S5009605.JPG</div>
   </div>
 
-  <div class="card">
-    <a href="S5009608.JPG">
-      <img src="S5009608.JPG" alt="S5009608.JPG">
-      <div>S5009608.JPG</div>
-    </a>
+  <div class="card" onclick="openLightbox(2)">
+    <img src="S5009608.JPG" alt="S5009608.JPG">
+    <div>S5009608.JPG</div>
   </div>
 
-  <div class="card">
-    <a href="S5009612.JPG">
-      <img src="S5009612.JPG" alt="S5009612.JPG">
-      <div>S5009612.JPG</div>
-    </a>
+  <div class="card" onclick="openLightbox(3)">
+    <img src="S5009612.JPG" alt="S5009612.JPG">
+    <div>S5009612.JPG</div>
   </div>
 
-  <div class="card">
-    <a href="S5009614.JPG">
-      <img src="S5009614.JPG" alt="S5009614.JPG">
-      <div>S5009614.JPG</div>
-    </a>
+  <div class="card" onclick="openLightbox(4)">
+    <img src="S5009614.JPG" alt="S5009614.JPG">
+    <div>S5009614.JPG</div>
   </div>
 
-  <div class="card">
-    <a href="S5009617.JPG">
-      <img src="S5009617.JPG" alt="S5009617.JPG">
-      <div>S5009617.JPG</div>
-    </a>
+  <div class="card" onclick="openLightbox(5)">
+    <img src="S5009617.JPG" alt="S5009617.JPG">
+    <div>S5009617.JPG</div>
   </div>
 
-  <div class="card">
-    <a href="S5009619.JPG">
-      <img src="S5009619.JPG" alt="S5009619.JPG">
-      <div>S5009619.JPG</div>
-    </a>
+  <div class="card" onclick="openLightbox(6)">
+    <img src="S5009619.JPG" alt="S5009619.JPG">
+    <div>S5009619.JPG</div>
   </div>
 
-  <div class="card">
-    <a href="S5009625.JPG">
-      <img src="S5009625.JPG" alt="S5009625.JPG">
-      <div>S5009625.JPG</div>
-    </a>
+  <div class="card" onclick="openLightbox(7)">
+    <img src="S5009625.JPG" alt="S5009625.JPG">
+    <div>S5009625.JPG</div>
   </div>
 
-  <div class="card">
-    <a href="S5009630.JPG">
-      <img src="S5009630.JPG" alt="S5009630.JPG">
-      <div>S5009630.JPG</div>
-    </a>
+  <div class="card" onclick="openLightbox(8)">
+    <img src="S5009630.JPG" alt="S5009630.JPG">
+    <div>S5009630.JPG</div>
   </div>
 
-  <div class="card">
-    <a href="S5009641.JPG">
-      <img src="S5009641.JPG" alt="S5009641.JPG">
-      <div>S5009641.JPG</div>
-    </a>
+  <div class="card" onclick="openLightbox(9)">
+    <img src="S5009641.JPG" alt="S5009641.JPG">
+    <div>S5009641.JPG</div>
   </div>
 
-  <div class="card">
-    <a href="S5009642.jpg">
-      <img src="S5009642.jpg" alt="S5009642.jpg">
-      <div>S5009642.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(10)">
+    <img src="S5009642.jpg" alt="S5009642.jpg">
+    <div>S5009642.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009643.jpg">
-      <img src="S5009643.jpg" alt="S5009643.jpg">
-      <div>S5009643.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(11)">
+    <img src="S5009643.jpg" alt="S5009643.jpg">
+    <div>S5009643.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009644.jpg">
-      <img src="S5009644.jpg" alt="S5009644.jpg">
-      <div>S5009644.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(12)">
+    <img src="S5009644.jpg" alt="S5009644.jpg">
+    <div>S5009644.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009645.jpg">
-      <img src="S5009645.jpg" alt="S5009645.jpg">
-      <div>S5009645.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(13)">
+    <img src="S5009645.jpg" alt="S5009645.jpg">
+    <div>S5009645.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009646.jpg">
-      <img src="S5009646.jpg" alt="S5009646.jpg">
-      <div>S5009646.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(14)">
+    <img src="S5009646.jpg" alt="S5009646.jpg">
+    <div>S5009646.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009648.jpg">
-      <img src="S5009648.jpg" alt="S5009648.jpg">
-      <div>S5009648.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(15)">
+    <img src="S5009648.jpg" alt="S5009648.jpg">
+    <div>S5009648.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009649.jpg">
-      <img src="S5009649.jpg" alt="S5009649.jpg">
-      <div>S5009649.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(16)">
+    <img src="S5009649.jpg" alt="S5009649.jpg">
+    <div>S5009649.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009650.jpg">
-      <img src="S5009650.jpg" alt="S5009650.jpg">
-      <div>S5009650.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(17)">
+    <img src="S5009650.jpg" alt="S5009650.jpg">
+    <div>S5009650.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009651.jpg">
-      <img src="S5009651.jpg" alt="S5009651.jpg">
-      <div>S5009651.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(18)">
+    <img src="S5009651.jpg" alt="S5009651.jpg">
+    <div>S5009651.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009652.jpg">
-      <img src="S5009652.jpg" alt="S5009652.jpg">
-      <div>S5009652.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(19)">
+    <img src="S5009652.jpg" alt="S5009652.jpg">
+    <div>S5009652.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009653.jpg">
-      <img src="S5009653.jpg" alt="S5009653.jpg">
-      <div>S5009653.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(20)">
+    <img src="S5009653.jpg" alt="S5009653.jpg">
+    <div>S5009653.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009654.jpg">
-      <img src="S5009654.jpg" alt="S5009654.jpg">
-      <div>S5009654.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(21)">
+    <img src="S5009654.jpg" alt="S5009654.jpg">
+    <div>S5009654.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009655.jpg">
-      <img src="S5009655.jpg" alt="S5009655.jpg">
-      <div>S5009655.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(22)">
+    <img src="S5009655.jpg" alt="S5009655.jpg">
+    <div>S5009655.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009656.jpg">
-      <img src="S5009656.jpg" alt="S5009656.jpg">
-      <div>S5009656.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(23)">
+    <img src="S5009656.jpg" alt="S5009656.jpg">
+    <div>S5009656.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009657.jpg">
-      <img src="S5009657.jpg" alt="S5009657.jpg">
-      <div>S5009657.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(24)">
+    <img src="S5009657.jpg" alt="S5009657.jpg">
+    <div>S5009657.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009658.jpg">
-      <img src="S5009658.jpg" alt="S5009658.jpg">
-      <div>S5009658.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(25)">
+    <img src="S5009658.jpg" alt="S5009658.jpg">
+    <div>S5009658.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009659.jpg">
-      <img src="S5009659.jpg" alt="S5009659.jpg">
-      <div>S5009659.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(26)">
+    <img src="S5009659.jpg" alt="S5009659.jpg">
+    <div>S5009659.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009660.jpg">
-      <img src="S5009660.jpg" alt="S5009660.jpg">
-      <div>S5009660.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(27)">
+    <img src="S5009660.jpg" alt="S5009660.jpg">
+    <div>S5009660.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009661.jpg">
-      <img src="S5009661.jpg" alt="S5009661.jpg">
-      <div>S5009661.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(28)">
+    <img src="S5009661.jpg" alt="S5009661.jpg">
+    <div>S5009661.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009662.jpg">
-      <img src="S5009662.jpg" alt="S5009662.jpg">
-      <div>S5009662.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(29)">
+    <img src="S5009662.jpg" alt="S5009662.jpg">
+    <div>S5009662.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009663.jpg">
-      <img src="S5009663.jpg" alt="S5009663.jpg">
-      <div>S5009663.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(30)">
+    <img src="S5009663.jpg" alt="S5009663.jpg">
+    <div>S5009663.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009664.jpg">
-      <img src="S5009664.jpg" alt="S5009664.jpg">
-      <div>S5009664.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(31)">
+    <img src="S5009664.jpg" alt="S5009664.jpg">
+    <div>S5009664.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009665.jpg">
-      <img src="S5009665.jpg" alt="S5009665.jpg">
-      <div>S5009665.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(32)">
+    <img src="S5009665.jpg" alt="S5009665.jpg">
+    <div>S5009665.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009666.jpg">
-      <img src="S5009666.jpg" alt="S5009666.jpg">
-      <div>S5009666.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(33)">
+    <img src="S5009666.jpg" alt="S5009666.jpg">
+    <div>S5009666.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009667.jpg">
-      <img src="S5009667.jpg" alt="S5009667.jpg">
-      <div>S5009667.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(34)">
+    <img src="S5009667.jpg" alt="S5009667.jpg">
+    <div>S5009667.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009668.jpg">
-      <img src="S5009668.jpg" alt="S5009668.jpg">
-      <div>S5009668.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(35)">
+    <img src="S5009668.jpg" alt="S5009668.jpg">
+    <div>S5009668.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009669.jpg">
-      <img src="S5009669.jpg" alt="S5009669.jpg">
-      <div>S5009669.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(36)">
+    <img src="S5009669.jpg" alt="S5009669.jpg">
+    <div>S5009669.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009670.jpg">
-      <img src="S5009670.jpg" alt="S5009670.jpg">
-      <div>S5009670.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(37)">
+    <img src="S5009670.jpg" alt="S5009670.jpg">
+    <div>S5009670.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009671.jpg">
-      <img src="S5009671.jpg" alt="S5009671.jpg">
-      <div>S5009671.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(38)">
+    <img src="S5009671.jpg" alt="S5009671.jpg">
+    <div>S5009671.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009672.jpg">
-      <img src="S5009672.jpg" alt="S5009672.jpg">
-      <div>S5009672.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(39)">
+    <img src="S5009672.jpg" alt="S5009672.jpg">
+    <div>S5009672.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009673.jpg">
-      <img src="S5009673.jpg" alt="S5009673.jpg">
-      <div>S5009673.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(40)">
+    <img src="S5009673.jpg" alt="S5009673.jpg">
+    <div>S5009673.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009675.jpg">
-      <img src="S5009675.jpg" alt="S5009675.jpg">
-      <div>S5009675.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(41)">
+    <img src="S5009675.jpg" alt="S5009675.jpg">
+    <div>S5009675.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009676.jpg">
-      <img src="S5009676.jpg" alt="S5009676.jpg">
-      <div>S5009676.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(42)">
+    <img src="S5009676.jpg" alt="S5009676.jpg">
+    <div>S5009676.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009677.jpg">
-      <img src="S5009677.jpg" alt="S5009677.jpg">
-      <div>S5009677.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(43)">
+    <img src="S5009677.jpg" alt="S5009677.jpg">
+    <div>S5009677.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009678.jpg">
-      <img src="S5009678.jpg" alt="S5009678.jpg">
-      <div>S5009678.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(44)">
+    <img src="S5009678.jpg" alt="S5009678.jpg">
+    <div>S5009678.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009679.jpg">
-      <img src="S5009679.jpg" alt="S5009679.jpg">
-      <div>S5009679.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(45)">
+    <img src="S5009679.jpg" alt="S5009679.jpg">
+    <div>S5009679.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009680.jpg">
-      <img src="S5009680.jpg" alt="S5009680.jpg">
-      <div>S5009680.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(46)">
+    <img src="S5009680.jpg" alt="S5009680.jpg">
+    <div>S5009680.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009681.jpg">
-      <img src="S5009681.jpg" alt="S5009681.jpg">
-      <div>S5009681.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(47)">
+    <img src="S5009681.jpg" alt="S5009681.jpg">
+    <div>S5009681.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009682.jpg">
-      <img src="S5009682.jpg" alt="S5009682.jpg">
-      <div>S5009682.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(48)">
+    <img src="S5009682.jpg" alt="S5009682.jpg">
+    <div>S5009682.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009683.jpg">
-      <img src="S5009683.jpg" alt="S5009683.jpg">
-      <div>S5009683.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(49)">
+    <img src="S5009683.jpg" alt="S5009683.jpg">
+    <div>S5009683.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009684.jpg">
-      <img src="S5009684.jpg" alt="S5009684.jpg">
-      <div>S5009684.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(50)">
+    <img src="S5009684.jpg" alt="S5009684.jpg">
+    <div>S5009684.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009685.jpg">
-      <img src="S5009685.jpg" alt="S5009685.jpg">
-      <div>S5009685.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(51)">
+    <img src="S5009685.jpg" alt="S5009685.jpg">
+    <div>S5009685.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009686.jpg">
-      <img src="S5009686.jpg" alt="S5009686.jpg">
-      <div>S5009686.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(52)">
+    <img src="S5009686.jpg" alt="S5009686.jpg">
+    <div>S5009686.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009687.jpg">
-      <img src="S5009687.jpg" alt="S5009687.jpg">
-      <div>S5009687.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(53)">
+    <img src="S5009687.jpg" alt="S5009687.jpg">
+    <div>S5009687.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009688.jpg">
-      <img src="S5009688.jpg" alt="S5009688.jpg">
-      <div>S5009688.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(54)">
+    <img src="S5009688.jpg" alt="S5009688.jpg">
+    <div>S5009688.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009689.jpg">
-      <img src="S5009689.jpg" alt="S5009689.jpg">
-      <div>S5009689.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(55)">
+    <img src="S5009689.jpg" alt="S5009689.jpg">
+    <div>S5009689.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009690.jpg">
-      <img src="S5009690.jpg" alt="S5009690.jpg">
-      <div>S5009690.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(56)">
+    <img src="S5009690.jpg" alt="S5009690.jpg">
+    <div>S5009690.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009691.jpg">
-      <img src="S5009691.jpg" alt="S5009691.jpg">
-      <div>S5009691.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(57)">
+    <img src="S5009691.jpg" alt="S5009691.jpg">
+    <div>S5009691.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009692.jpg">
-      <img src="S5009692.jpg" alt="S5009692.jpg">
-      <div>S5009692.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(58)">
+    <img src="S5009692.jpg" alt="S5009692.jpg">
+    <div>S5009692.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009693.jpg">
-      <img src="S5009693.jpg" alt="S5009693.jpg">
-      <div>S5009693.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(59)">
+    <img src="S5009693.jpg" alt="S5009693.jpg">
+    <div>S5009693.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009694.jpg">
-      <img src="S5009694.jpg" alt="S5009694.jpg">
-      <div>S5009694.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(60)">
+    <img src="S5009694.jpg" alt="S5009694.jpg">
+    <div>S5009694.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009695.jpg">
-      <img src="S5009695.jpg" alt="S5009695.jpg">
-      <div>S5009695.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(61)">
+    <img src="S5009695.jpg" alt="S5009695.jpg">
+    <div>S5009695.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009696.jpg">
-      <img src="S5009696.jpg" alt="S5009696.jpg">
-      <div>S5009696.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(62)">
+    <img src="S5009696.jpg" alt="S5009696.jpg">
+    <div>S5009696.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009697.jpg">
-      <img src="S5009697.jpg" alt="S5009697.jpg">
-      <div>S5009697.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(63)">
+    <img src="S5009697.jpg" alt="S5009697.jpg">
+    <div>S5009697.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009698.jpg">
-      <img src="S5009698.jpg" alt="S5009698.jpg">
-      <div>S5009698.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(64)">
+    <img src="S5009698.jpg" alt="S5009698.jpg">
+    <div>S5009698.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009699.jpg">
-      <img src="S5009699.jpg" alt="S5009699.jpg">
-      <div>S5009699.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(65)">
+    <img src="S5009699.jpg" alt="S5009699.jpg">
+    <div>S5009699.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009700.jpg">
-      <img src="S5009700.jpg" alt="S5009700.jpg">
-      <div>S5009700.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(66)">
+    <img src="S5009700.jpg" alt="S5009700.jpg">
+    <div>S5009700.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009701.jpg">
-      <img src="S5009701.jpg" alt="S5009701.jpg">
-      <div>S5009701.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(67)">
+    <img src="S5009701.jpg" alt="S5009701.jpg">
+    <div>S5009701.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009702.jpg">
-      <img src="S5009702.jpg" alt="S5009702.jpg">
-      <div>S5009702.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(68)">
+    <img src="S5009702.jpg" alt="S5009702.jpg">
+    <div>S5009702.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009703.jpg">
-      <img src="S5009703.jpg" alt="S5009703.jpg">
-      <div>S5009703.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(69)">
+    <img src="S5009703.jpg" alt="S5009703.jpg">
+    <div>S5009703.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009704.jpg">
-      <img src="S5009704.jpg" alt="S5009704.jpg">
-      <div>S5009704.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(70)">
+    <img src="S5009704.jpg" alt="S5009704.jpg">
+    <div>S5009704.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009705.jpg">
-      <img src="S5009705.jpg" alt="S5009705.jpg">
-      <div>S5009705.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(71)">
+    <img src="S5009705.jpg" alt="S5009705.jpg">
+    <div>S5009705.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009706.jpg">
-      <img src="S5009706.jpg" alt="S5009706.jpg">
-      <div>S5009706.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(72)">
+    <img src="S5009706.jpg" alt="S5009706.jpg">
+    <div>S5009706.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009707.jpg">
-      <img src="S5009707.jpg" alt="S5009707.jpg">
-      <div>S5009707.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(73)">
+    <img src="S5009707.jpg" alt="S5009707.jpg">
+    <div>S5009707.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009708.jpg">
-      <img src="S5009708.jpg" alt="S5009708.jpg">
-      <div>S5009708.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(74)">
+    <img src="S5009708.jpg" alt="S5009708.jpg">
+    <div>S5009708.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009709.jpg">
-      <img src="S5009709.jpg" alt="S5009709.jpg">
-      <div>S5009709.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(75)">
+    <img src="S5009709.jpg" alt="S5009709.jpg">
+    <div>S5009709.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009710.jpg">
-      <img src="S5009710.jpg" alt="S5009710.jpg">
-      <div>S5009710.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(76)">
+    <img src="S5009710.jpg" alt="S5009710.jpg">
+    <div>S5009710.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009711.jpg">
-      <img src="S5009711.jpg" alt="S5009711.jpg">
-      <div>S5009711.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(77)">
+    <img src="S5009711.jpg" alt="S5009711.jpg">
+    <div>S5009711.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009712.jpg">
-      <img src="S5009712.jpg" alt="S5009712.jpg">
-      <div>S5009712.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(78)">
+    <img src="S5009712.jpg" alt="S5009712.jpg">
+    <div>S5009712.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009713.jpg">
-      <img src="S5009713.jpg" alt="S5009713.jpg">
-      <div>S5009713.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(79)">
+    <img src="S5009713.jpg" alt="S5009713.jpg">
+    <div>S5009713.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009714.jpg">
-      <img src="S5009714.jpg" alt="S5009714.jpg">
-      <div>S5009714.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(80)">
+    <img src="S5009714.jpg" alt="S5009714.jpg">
+    <div>S5009714.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009715.jpg">
-      <img src="S5009715.jpg" alt="S5009715.jpg">
-      <div>S5009715.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(81)">
+    <img src="S5009715.jpg" alt="S5009715.jpg">
+    <div>S5009715.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009716.jpg">
-      <img src="S5009716.jpg" alt="S5009716.jpg">
-      <div>S5009716.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(82)">
+    <img src="S5009716.jpg" alt="S5009716.jpg">
+    <div>S5009716.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009717.jpg">
-      <img src="S5009717.jpg" alt="S5009717.jpg">
-      <div>S5009717.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(83)">
+    <img src="S5009717.jpg" alt="S5009717.jpg">
+    <div>S5009717.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009718.jpg">
-      <img src="S5009718.jpg" alt="S5009718.jpg">
-      <div>S5009718.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(84)">
+    <img src="S5009718.jpg" alt="S5009718.jpg">
+    <div>S5009718.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009719.jpg">
-      <img src="S5009719.jpg" alt="S5009719.jpg">
-      <div>S5009719.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(85)">
+    <img src="S5009719.jpg" alt="S5009719.jpg">
+    <div>S5009719.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009720.jpg">
-      <img src="S5009720.jpg" alt="S5009720.jpg">
-      <div>S5009720.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(86)">
+    <img src="S5009720.jpg" alt="S5009720.jpg">
+    <div>S5009720.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009721.jpg">
-      <img src="S5009721.jpg" alt="S5009721.jpg">
-      <div>S5009721.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(87)">
+    <img src="S5009721.jpg" alt="S5009721.jpg">
+    <div>S5009721.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009722.jpg">
-      <img src="S5009722.jpg" alt="S5009722.jpg">
-      <div>S5009722.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(88)">
+    <img src="S5009722.jpg" alt="S5009722.jpg">
+    <div>S5009722.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009723.jpg">
-      <img src="S5009723.jpg" alt="S5009723.jpg">
-      <div>S5009723.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(89)">
+    <img src="S5009723.jpg" alt="S5009723.jpg">
+    <div>S5009723.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009724.jpg">
-      <img src="S5009724.jpg" alt="S5009724.jpg">
-      <div>S5009724.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(90)">
+    <img src="S5009724.jpg" alt="S5009724.jpg">
+    <div>S5009724.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009725.jpg">
-      <img src="S5009725.jpg" alt="S5009725.jpg">
-      <div>S5009725.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(91)">
+    <img src="S5009725.jpg" alt="S5009725.jpg">
+    <div>S5009725.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009726.jpg">
-      <img src="S5009726.jpg" alt="S5009726.jpg">
-      <div>S5009726.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(92)">
+    <img src="S5009726.jpg" alt="S5009726.jpg">
+    <div>S5009726.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009727.jpg">
-      <img src="S5009727.jpg" alt="S5009727.jpg">
-      <div>S5009727.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(93)">
+    <img src="S5009727.jpg" alt="S5009727.jpg">
+    <div>S5009727.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009728.jpg">
-      <img src="S5009728.jpg" alt="S5009728.jpg">
-      <div>S5009728.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(94)">
+    <img src="S5009728.jpg" alt="S5009728.jpg">
+    <div>S5009728.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009729.jpg">
-      <img src="S5009729.jpg" alt="S5009729.jpg">
-      <div>S5009729.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(95)">
+    <img src="S5009729.jpg" alt="S5009729.jpg">
+    <div>S5009729.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009730.jpg">
-      <img src="S5009730.jpg" alt="S5009730.jpg">
-      <div>S5009730.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(96)">
+    <img src="S5009730.jpg" alt="S5009730.jpg">
+    <div>S5009730.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009731.jpg">
-      <img src="S5009731.jpg" alt="S5009731.jpg">
-      <div>S5009731.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(97)">
+    <img src="S5009731.jpg" alt="S5009731.jpg">
+    <div>S5009731.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009732.jpg">
-      <img src="S5009732.jpg" alt="S5009732.jpg">
-      <div>S5009732.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(98)">
+    <img src="S5009732.jpg" alt="S5009732.jpg">
+    <div>S5009732.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009733.jpg">
-      <img src="S5009733.jpg" alt="S5009733.jpg">
-      <div>S5009733.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(99)">
+    <img src="S5009733.jpg" alt="S5009733.jpg">
+    <div>S5009733.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009734.jpg">
-      <img src="S5009734.jpg" alt="S5009734.jpg">
-      <div>S5009734.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(100)">
+    <img src="S5009734.jpg" alt="S5009734.jpg">
+    <div>S5009734.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009735.jpg">
-      <img src="S5009735.jpg" alt="S5009735.jpg">
-      <div>S5009735.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(101)">
+    <img src="S5009735.jpg" alt="S5009735.jpg">
+    <div>S5009735.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009736.jpg">
-      <img src="S5009736.jpg" alt="S5009736.jpg">
-      <div>S5009736.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(102)">
+    <img src="S5009736.jpg" alt="S5009736.jpg">
+    <div>S5009736.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009737.jpg">
-      <img src="S5009737.jpg" alt="S5009737.jpg">
-      <div>S5009737.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(103)">
+    <img src="S5009737.jpg" alt="S5009737.jpg">
+    <div>S5009737.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009738.jpg">
-      <img src="S5009738.jpg" alt="S5009738.jpg">
-      <div>S5009738.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(104)">
+    <img src="S5009738.jpg" alt="S5009738.jpg">
+    <div>S5009738.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009739.jpg">
-      <img src="S5009739.jpg" alt="S5009739.jpg">
-      <div>S5009739.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(105)">
+    <img src="S5009739.jpg" alt="S5009739.jpg">
+    <div>S5009739.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009740.jpg">
-      <img src="S5009740.jpg" alt="S5009740.jpg">
-      <div>S5009740.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(106)">
+    <img src="S5009740.jpg" alt="S5009740.jpg">
+    <div>S5009740.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009741.jpg">
-      <img src="S5009741.jpg" alt="S5009741.jpg">
-      <div>S5009741.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(107)">
+    <img src="S5009741.jpg" alt="S5009741.jpg">
+    <div>S5009741.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009742.jpg">
-      <img src="S5009742.jpg" alt="S5009742.jpg">
-      <div>S5009742.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(108)">
+    <img src="S5009742.jpg" alt="S5009742.jpg">
+    <div>S5009742.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009743.jpg">
-      <img src="S5009743.jpg" alt="S5009743.jpg">
-      <div>S5009743.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(109)">
+    <img src="S5009743.jpg" alt="S5009743.jpg">
+    <div>S5009743.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009744.jpg">
-      <img src="S5009744.jpg" alt="S5009744.jpg">
-      <div>S5009744.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(110)">
+    <img src="S5009744.jpg" alt="S5009744.jpg">
+    <div>S5009744.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009745.jpg">
-      <img src="S5009745.jpg" alt="S5009745.jpg">
-      <div>S5009745.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(111)">
+    <img src="S5009745.jpg" alt="S5009745.jpg">
+    <div>S5009745.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009746.jpg">
-      <img src="S5009746.jpg" alt="S5009746.jpg">
-      <div>S5009746.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(112)">
+    <img src="S5009746.jpg" alt="S5009746.jpg">
+    <div>S5009746.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009747.jpg">
-      <img src="S5009747.jpg" alt="S5009747.jpg">
-      <div>S5009747.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(113)">
+    <img src="S5009747.jpg" alt="S5009747.jpg">
+    <div>S5009747.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009748.jpg">
-      <img src="S5009748.jpg" alt="S5009748.jpg">
-      <div>S5009748.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(114)">
+    <img src="S5009748.jpg" alt="S5009748.jpg">
+    <div>S5009748.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009749.jpg">
-      <img src="S5009749.jpg" alt="S5009749.jpg">
-      <div>S5009749.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(115)">
+    <img src="S5009749.jpg" alt="S5009749.jpg">
+    <div>S5009749.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009750.jpg">
-      <img src="S5009750.jpg" alt="S5009750.jpg">
-      <div>S5009750.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(116)">
+    <img src="S5009750.jpg" alt="S5009750.jpg">
+    <div>S5009750.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009751.jpg">
-      <img src="S5009751.jpg" alt="S5009751.jpg">
-      <div>S5009751.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(117)">
+    <img src="S5009751.jpg" alt="S5009751.jpg">
+    <div>S5009751.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009752.jpg">
-      <img src="S5009752.jpg" alt="S5009752.jpg">
-      <div>S5009752.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(118)">
+    <img src="S5009752.jpg" alt="S5009752.jpg">
+    <div>S5009752.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009753.jpg">
-      <img src="S5009753.jpg" alt="S5009753.jpg">
-      <div>S5009753.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(119)">
+    <img src="S5009753.jpg" alt="S5009753.jpg">
+    <div>S5009753.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009754.jpg">
-      <img src="S5009754.jpg" alt="S5009754.jpg">
-      <div>S5009754.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(120)">
+    <img src="S5009754.jpg" alt="S5009754.jpg">
+    <div>S5009754.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009755.jpg">
-      <img src="S5009755.jpg" alt="S5009755.jpg">
-      <div>S5009755.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(121)">
+    <img src="S5009755.jpg" alt="S5009755.jpg">
+    <div>S5009755.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009756.jpg">
-      <img src="S5009756.jpg" alt="S5009756.jpg">
-      <div>S5009756.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(122)">
+    <img src="S5009756.jpg" alt="S5009756.jpg">
+    <div>S5009756.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009757.jpg">
-      <img src="S5009757.jpg" alt="S5009757.jpg">
-      <div>S5009757.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(123)">
+    <img src="S5009757.jpg" alt="S5009757.jpg">
+    <div>S5009757.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009758.jpg">
-      <img src="S5009758.jpg" alt="S5009758.jpg">
-      <div>S5009758.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(124)">
+    <img src="S5009758.jpg" alt="S5009758.jpg">
+    <div>S5009758.jpg</div>
   </div>
 
-  <div class="card">
-    <a href="S5009759.jpg">
-      <img src="S5009759.jpg" alt="S5009759.jpg">
-      <div>S5009759.jpg</div>
-    </a>
+  <div class="card" onclick="openLightbox(125)">
+    <img src="S5009759.jpg" alt="S5009759.jpg">
+    <div>S5009759.jpg</div>
   </div>
 
 </div>
+
+<div id="lightbox" class="lightbox">
+  <span class="close" onclick="closeLightbox()">&times;</span>
+  <span class="prev" onclick="changeImage(-1)">&#10094;</span>
+  <span class="next" onclick="changeImage(1)">&#10095;</span>
+  <img id="lightbox-img" src="" alt="">
+  <div class="caption" id="caption"></div>
+</div>
+
+<script>
+const images = ['S5009601.JPG', 'S5009605.JPG', 'S5009608.JPG', 'S5009612.JPG', 'S5009614.JPG', 'S5009617.JPG', 'S5009619.JPG', 'S5009625.JPG', 'S5009630.JPG', 'S5009641.JPG', 'S5009642.jpg', 'S5009643.jpg', 'S5009644.jpg', 'S5009645.jpg', 'S5009646.jpg', 'S5009648.jpg', 'S5009649.jpg', 'S5009650.jpg', 'S5009651.jpg', 'S5009652.jpg', 'S5009653.jpg', 'S5009654.jpg', 'S5009655.jpg', 'S5009656.jpg', 'S5009657.jpg', 'S5009658.jpg', 'S5009659.jpg', 'S5009660.jpg', 'S5009661.jpg', 'S5009662.jpg', 'S5009663.jpg', 'S5009664.jpg', 'S5009665.jpg', 'S5009666.jpg', 'S5009667.jpg', 'S5009668.jpg', 'S5009669.jpg', 'S5009670.jpg', 'S5009671.jpg', 'S5009672.jpg', 'S5009673.jpg', 'S5009675.jpg', 'S5009676.jpg', 'S5009677.jpg', 'S5009678.jpg', 'S5009679.jpg', 'S5009680.jpg', 'S5009681.jpg', 'S5009682.jpg', 'S5009683.jpg', 'S5009684.jpg', 'S5009685.jpg', 'S5009686.jpg', 'S5009687.jpg', 'S5009688.jpg', 'S5009689.jpg', 'S5009690.jpg', 'S5009691.jpg', 'S5009692.jpg', 'S5009693.jpg', 'S5009694.jpg', 'S5009695.jpg', 'S5009696.jpg', 'S5009697.jpg', 'S5009698.jpg', 'S5009699.jpg', 'S5009700.jpg', 'S5009701.jpg', 'S5009702.jpg', 'S5009703.jpg', 'S5009704.jpg', 'S5009705.jpg', 'S5009706.jpg', 'S5009707.jpg', 'S5009708.jpg', 'S5009709.jpg', 'S5009710.jpg', 'S5009711.jpg', 'S5009712.jpg', 'S5009713.jpg', 'S5009714.jpg', 'S5009715.jpg', 'S5009716.jpg', 'S5009717.jpg', 'S5009718.jpg', 'S5009719.jpg', 'S5009720.jpg', 'S5009721.jpg', 'S5009722.jpg', 'S5009723.jpg', 'S5009724.jpg', 'S5009725.jpg', 'S5009726.jpg', 'S5009727.jpg', 'S5009728.jpg', 'S5009729.jpg', 'S5009730.jpg', 'S5009731.jpg', 'S5009732.jpg', 'S5009733.jpg', 'S5009734.jpg', 'S5009735.jpg', 'S5009736.jpg', 'S5009737.jpg', 'S5009738.jpg', 'S5009739.jpg', 'S5009740.jpg', 'S5009741.jpg', 'S5009742.jpg', 'S5009743.jpg', 'S5009744.jpg', 'S5009745.jpg', 'S5009746.jpg', 'S5009747.jpg', 'S5009748.jpg', 'S5009749.jpg', 'S5009750.jpg', 'S5009751.jpg', 'S5009752.jpg', 'S5009753.jpg', 'S5009754.jpg', 'S5009755.jpg', 'S5009756.jpg', 'S5009757.jpg', 'S5009758.jpg', 'S5009759.jpg'];
+let currentIndex = 0;
+
+function openLightbox(index) {
+  currentIndex = index;
+  const lightbox = document.getElementById('lightbox');
+  const img = document.getElementById('lightbox-img');
+  const caption = document.getElementById('caption');
+  img.src = images[index];
+  caption.textContent = images[index];
+  lightbox.style.display = 'flex';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').style.display = 'none';
+}
+
+function changeImage(direction) {
+  currentIndex = (currentIndex + direction + images.length) % images.length;
+  const img = document.getElementById('lightbox-img');
+  const caption = document.getElementById('caption');
+  img.src = images[currentIndex];
+  caption.textContent = images[currentIndex];
+}
+
+document.addEventListener('keydown', (e) => {
+  const lightbox = document.getElementById('lightbox');
+  if (lightbox.style.display === 'flex') {
+    if (e.key === 'ArrowRight') changeImage(1);
+    if (e.key === 'ArrowLeft') changeImage(-1);
+    if (e.key === 'Escape') closeLightbox();
+  }
+});
+</script>
+
 </body>
 </html>
