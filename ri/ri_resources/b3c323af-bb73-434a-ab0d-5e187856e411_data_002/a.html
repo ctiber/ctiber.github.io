@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script src="a_data/html-to-image.min.js" integrity="sha512-iZ2ORl595Wx6miw+GuadDet4WQbdSWS3JLMoNfY8cRGoEFy6oT3G9IbcrBeL6AfkgpA51ETt/faX6yLV+/gFJg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+      (function() {
+        const originalConsole = window.console;
+        window.console = {
+          log: (...args) => {
+            originalConsole.log(...args);
+            window.parent.postMessage({ type: 'console', message: args.join(' ') }, '*');
+          },
+          error: (...args) => {
+            originalConsole.error(...args);
+            window.parent.postMessage({ type: 'console', message: 'Error: ' + args.join(' ') }, '*');
+          },
+          warn: (...args) => {
+            originalConsole.warn(...args);
+            window.parent.postMessage({ type: 'console', message: 'Warning: ' + args.join(' ') }, '*');
+          }
+        };
+
+        let requestId = 0;
+        let callbacksMap = new Map();
+        let streamControllers = new Map();
+        
+        window.claude = {
+          complete: (prompt) => {
+            return new Promise((resolve, reject) => {
+              const id = requestId++;
+              callbacksMap.set(id, { resolve, reject });
+              window.parent.postMessage({ type: 'claudeComplete', id, prompt }, '*');
+            });
+          }
+        };
+
+        window.storage = {
+          get: (key, shared = false) => {
+            return new Promise((resolve, reject) => {
+              const id = requestId++;
+              callbacksMap.set(id, { resolve, reject });
+              window.parent.postMessage({ type: 'storageGet', id, key, shared }, '*');
+            });
+          },
+          set: (key, value, shared = false) => {
+            return new Promise((resolve, reject) => {
+              const id = requestId++;
+              callbacksMap.set(id, { resolve, reject });
+              window.parent.postMessage({ type: 'storageSet', id, key, value, shared }, '*');
+            });
+          },
+          delete: (key, shared = false) => {
+            return new Promise((resolve, reject) => {
+              const id = requestId++;
+              callbacksMap.set(id, { resolve, reject });
+              window.parent.postMessage({ type: 'storageDelete', id, key, shared }, '*');
+            });
+          },
+          list: (prefix, shared = false) => {
+            return new Promise((resolve, reject) => {
+              const id = requestId++;
+              callbacksMap.set(id, { resolve, reject });
+              window.parent.postMessage({ type: 'storageList', id, prefix, shared }, '*');
+            });
+          }
+        };
+
+        let pendingBlobs = new Map();
+        URL.createObjectURL = (blob) => {
+          // Store the blob and create an ID and URL for it
+          const blobId = `blob-${Date.now()}-${Math.random()}`;
+          pendingBlobs.set(blobId, blob);
+          return `blob-request://${blobId}`;
+        };
+
+        URL.revokeObjectURL = (url) => {
+          // Remove the blob from our store
+          const blobId = url.replace("blob-request://", "");
+          pendingBlobs.delete(blobId);
+        };
+
+        const getBlobFromURL = (url) => {
+          const blobId = url.replace("blob-request://", "");
+          return pendingBlobs.get(blobId);
+        };
+
+        // Override global fetch with streaming support
+        window.fetch = (url, init = {}) => {
+          return new Promise((resolve, reject) => {
+            const id = requestId++;
+            const channelId = `fetch-${id}-${Date.now()}`;
+            
+            callbacksMap.set(id, { 
+              resolve: (response) => {
+                // Create a ReadableStream for the response body
+                const stream = new ReadableStream({
+                  start(controller) {
+                    streamControllers.set(channelId, controller);
+                  },
+                  cancel() {
+                    streamControllers.delete(channelId);
+                  }
+                });
+                
+                // Create and return the Response with the stream
+                resolve(new Response(stream, {
+                  status: response.status,
+                  statusText: response.statusText,
+                  headers: response.headers
+                }));
+              },
+              reject,
+              channelId
+            });
+            
+            window.parent.postMessage({
+              type: 'proxyFetch',
+              id,
+              url,
+              init,
+              channelId
+            }, '*');
+          });
+        };
+
+        window.addEventListener('message', async (event) => {
+          if (event.data.type === 'takeScreenshot') {
+            const rootElement = document.getElementById('artifacts-component-root-html');
+            if (!rootElement) {
+              window.parent.postMessage({
+                type: 'screenshotError',
+                error: new Error('Root element not found'),
+              }, '*');
+            }
+            const screenshot = await htmlToImage.toPng(rootElement, {
+              imagePlaceholder:
+                "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdjePDgwX8ACOQDoNsk0PMAAAAASUVORK5CYII=",
+            });
+            window.parent.postMessage({
+              type: 'screenshotData',
+              data: screenshot,
+            }, '*');
+          } else if (event.data.type === 'claudeComplete') {
+            const callback = callbacksMap.get(event.data.id);
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+            } else {
+              callback.resolve(event.data.completion);
+            }
+            callbacksMap.delete(event.data.id);
+          } else if (event.data.type === 'proxyFetchResponse') {
+            const callback = callbacksMap.get(event.data.id);
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+              callbacksMap.delete(event.data.id);
+            } else {
+              // Initial response with headers, status, etc.
+              callback.resolve({
+                status: event.data.status,
+                statusText: event.data.statusText,
+                headers: event.data.headers
+              });
+              // Don't delete the callback yet if streaming
+              if (!event.data.body) {
+                callbacksMap.delete(event.data.id);
+              }
+            }
+          } else if (event.data.type === 'proxyFetchStream') {
+            // Handle streaming data chunks
+            const controller = streamControllers.get(event.data.channelId);
+            if (controller) {
+              if (event.data.error) {
+                controller.error(new Error(event.data.error));
+                streamControllers.delete(event.data.channelId);
+              } else if (event.data.done) {
+                controller.close();
+                streamControllers.delete(event.data.channelId);
+                // Clean up the callback
+                const callback = Array.from(callbacksMap.entries()).find(
+                  ([_, value]) => value.channelId === event.data.channelId
+                );
+                if (callback) {
+                  callbacksMap.delete(callback[0]);
+                }
+              } else if (event.data.chunk) {
+                controller.enqueue(new Uint8Array(event.data.chunk));
+              }
+            }
+          } else if (event.data.type === 'storageGet') {
+            const callback = callbacksMap.get(event.data.id);
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+            } else {
+              callback.resolve(event.data.result);
+            }
+            callbacksMap.delete(event.data.id);
+          } else if (event.data.type === 'storageSet') {
+            const callback = callbacksMap.get(event.data.id);
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+            } else {
+              callback.resolve(event.data.result);
+            }
+            callbacksMap.delete(event.data.id);
+          } else if (event.data.type === 'storageDelete') {
+            const callback = callbacksMap.get(event.data.id);
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+            } else {
+              callback.resolve(event.data.result);
+            }
+            callbacksMap.delete(event.data.id);
+          } else if (event.data.type === 'storageList') {
+            const callback = callbacksMap.get(event.data.id);
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+            } else {
+              callback.resolve(event.data.result);
+            }
+            callbacksMap.delete(event.data.id);
+          }
+        });
+
+        window.addEventListener('click', (event) => {
+          const isEl = event.target instanceof HTMLElement;
+          if (!isEl) return;
+    
+          // find ancestor links
+          const linkEl = event.target.closest("a");
+          if (!linkEl || !linkEl.href) return;
+    
+          event.preventDefault();
+          event.stopImmediatePropagation();
+    
+          if (linkEl.href.startsWith("blob-request:")) {
+            const blob = getBlobFromURL(linkEl.href);
+            if (!blob) return;
+            void blob.arrayBuffer().then((data) => {
+              window.parent.postMessage({
+                type: "downloadFile",
+                filename: linkEl.download,
+                data,
+                mimeType: blob.type || "application/octet-stream",
+              });
+            });
+          } else if (linkEl.href.startsWith("data:")) {
+            const [header, base64Data] = linkEl.href.split(",");
+            const mimeMatch = header.match(/data:([^;]+)/);
+            const mimeType = mimeMatch ? mimeMatch[1] : "application/octet-stream";
+            const binaryString = atob(base64Data);
+            const data = Uint8Array.from(binaryString, (c) =>
+              c.charCodeAt(0),
+            ).buffer;
+            window.parent.postMessage({
+              type: "downloadFile",
+              filename: linkEl.download,
+              data,
+              mimeType,
+            });
+          } else {
+            let linkUrl;
+            try {
+              linkUrl = new URL(linkEl.href);
+            } catch (error) {
+              return;
+            }
+    
+            if (linkUrl.hostname === window.location.hostname) return;
+      
+            window.parent.postMessage({
+              type: 'openExternal',
+              href: linkEl.href,
+            }, '*');
+          }
+      });
+
+        const originalOpen = window.open;
+        window.open = function (url) {
+          window.parent.postMessage({
+            type: "openExternal",
+            href: url,
+          }, "*");
+        };
+
+        window.addEventListener('error', (event) => {
+          window.parent.postMessage({ type: 'console', message: 'Uncaught Error: ' + event.message }, '*');
+        });
+      })();
+    </script>
+  
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobilité internationale — IUT de Vannes 2026-2027</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #f5f5f3; color: #1a1a18; min-height: 100vh; padding: 2rem; }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+
+  .page-header { margin-bottom: 2rem; }
+  .page-header h1 { font-size: 24px; font-weight: 500; color: #1a1a18; margin-bottom: 0.3rem; }
+  .page-header p { font-size: 14px; color: #73726c; }
+
+  .tabs { display: flex; border-bottom: 1px solid #e0dfd9; margin-bottom: 2rem; }
+  .tab-btn { font-size: 14px; font-family: inherit; padding: 10px 20px; border: none; background: transparent; color: #73726c; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all .15s; }
+  .tab-btn:hover { color: #1a1a18; }
+  .tab-btn.active { color: #1a1a18; border-bottom-color: #1a1a18; font-weight: 500; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.25rem; align-items: center; }
+  .filter-label { font-size: 12px; color: #aaa; margin-right: 4px; }
+  .filter-btn { font-size: 12px; padding: 5px 14px; border-radius: 20px; border: 1px solid #ccc; background: transparent; color: #555; cursor: pointer; transition: all .15s; font-family: inherit; }
+  .filter-btn:hover { border-color: #999; }
+  .filter-btn.active { border-color: transparent; color: white; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; }
+  .card { background: #fff; border: 1px solid #e5e4de; border-radius: 12px; padding: 14px 16px; transition: border-color .15s, box-shadow .15s; display: flex; flex-direction: column; gap: 7px; }
+  .card:hover { border-color: #bbb; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .card.double { border-left: 3px solid #C62828; }
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .card-num { font-size: 11px; color: #aaa; font-weight: 500; flex-shrink: 0; }
+  .card-name { font-size: 13px; font-weight: 500; color: #1a1a18; line-height: 1.4; }
+  .card-name a { color: inherit; text-decoration: none; border-bottom: 1px dotted #bbb; transition: border-color .15s, color .15s; }
+  .card-name a:hover { color: #1565C0; border-bottom-color: #1565C0; }
+  .card-city { font-size: 12px; color: #73726c; }
+
+  /* Badges row */
+  .badges { display: flex; flex-wrap: wrap; gap: 4px; }
+  .badge { font-size: 10px; padding: 2px 8px; border-radius: 12px; font-weight: 600; }
+  .tag { font-size: 10px; padding: 2px 8px; border-radius: 12px; border: 1px solid #e0dfd9; color: #73726c; background: #f5f5f3; }
+
+  /* BUT/Semester details table */
+  .semtable { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .semtable thead tr { border-bottom: 1px solid #f0ede8; }
+  .semtable th { text-align: left; font-weight: 500; color: #aaa; padding: 3px 6px 3px 0; font-size: 10px; white-space: nowrap; }
+  .semtable td { padding: 3px 6px 3px 0; vertical-align: middle; }
+  .sem-tag { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 8px; font-weight: 500; white-space: nowrap; }
+  .places-num { font-weight: 600; color: #555; }
+
+  /* Dates */
+  .card-dates { font-size: 11px; color: #555; background: #f9f8f5; border-radius: 6px; padding: 4px 8px; display: flex; align-items: center; gap: 5px; }
+
+  .no-results { font-size: 14px; color: #aaa; padding: 2rem 0; text-align: center; grid-column: 1/-1; }
+  .count { font-size: 12px; color: #aaa; margin-bottom: 1rem; }
+
+  .info-banner { background: #fff9e6; border: 1px solid #f7d87a; border-radius: 10px; padding: 12px 16px; margin-bottom: 1.5rem; font-size: 13px; color: #7a5c00; line-height: 1.5; }
+  .info-banner strong { font-weight: 600; }
+
+  .totals { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.5rem; }
+  .total-card { background: #fff; border: 1px solid #e5e4de; border-radius: 10px; padding: 12px 16px; text-align: center; min-width: 90px; }
+  .total-num { font-size: 22px; font-weight: 500; color: #1a1a18; }
+  .total-label { font-size: 11px; color: #999; margin-top: 2px; }
+</style>
+</head>
+<body id="artifacts-component-root-html">
+<div class="wrap">
+  <div class="page-header">
+    <h1>Mobilité internationale — IUT de Vannes</h1>
+    <p>Destinations prévisionnelles 2026-2027</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('semestres', this)">Semestres à l'étranger</button>
+    <button class="tab-btn" onclick="showTab('annees', this)">Années / Double diplôme</button>
+  </div>
+
+  <!-- TAB 1 : SEMESTRES -->
+  <div class="tab-panel active" id="tab-semestres">
+    <div class="totals">
+      <div class="total-card"><div class="total-num">17</div><div class="total-label">destinations</div></div>
+      <div class="total-card"><div class="total-num">69</div><div class="total-label">places totales</div></div>
+      <div class="total-card" style="border-left:3px solid #2E7D32"><div class="total-num" style="color:#2E7D32">27</div><div class="total-label">places GEA</div></div>
+      <div class="total-card" style="border-left:3px solid #1565C0"><div class="total-num" style="color:#1565C0">17</div><div class="total-label">places TC</div></div>
+      <div class="total-card" style="border-left:3px solid #E6A800"><div class="total-num" style="color:#E6A800">9</div><div class="total-label">places INFO</div></div>
+    </div>
+    <div class="filters">
+      <span class="filter-label">Filtrer :</span>
+      <button class="filter-btn active" onclick="filterSem('all', this)" style="background: rgb(68, 68, 68);">Toutes</button>
+      <button class="filter-btn" onclick="filterSem('GEA', this)">GEA</button>
+      <button class="filter-btn" onclick="filterSem('TC', this)">TC</button>
+      <button class="filter-btn" onclick="filterSem('INFO', this)">INFO</button>
+    </div>
+    <div class="count" id="count-sem">17 destinations</div>
+    <div class="cards" id="cards-sem">
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.th-ab.de/en/" target="_blank" rel="noopener">University of Applied Sciences</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇩🇪</span>
+            <span class="card-num">#1</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Aschaffenburg, Allemagne</div>
+        <div class="badges"><span class="badge" style="background:#C8E6C9;color:#1B5E20">GEA</span><span class="tag">Erasmus+</span></div>
+        <div class="card-dates">🗓 Fin septembre à mi-février</div>
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody><tr>
+        <td><span class="sem-tag" style="background:#C8E6C9;color:#1B5E20">GEA</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#2E7D32;white-space:nowrap;padding-left:8px">2 pl.</td>
+      </tr></tbody>
+        </table>
+        
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.hwg-lu.de/en" target="_blank" rel="noopener">University of Business and Society</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇩🇪</span>
+            <span class="card-num">#2</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Ludwigshafen, Allemagne</div>
+        <div class="badges"><span class="badge" style="background:#C8E6C9;color:#1B5E20">GEA</span><span class="tag">Erasmus+</span></div>
+        <div class="card-dates">🗓 Mi-septembre à mi-février</div>
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody><tr>
+        <td><span class="sem-tag" style="background:#C8E6C9;color:#1B5E20">GEA</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#2E7D32;white-space:nowrap;padding-left:8px">3 pl.</td>
+      </tr></tbody>
+        </table>
+        
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.vives.be/en" target="_blank" rel="noopener">University of Applied Sciences of Vives</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇧🇪</span>
+            <span class="card-num">#3</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Courtrai, Belgique</div>
+        <div class="badges"><span class="badge" style="background:#C8E6C9;color:#1B5E20">GEA</span><span class="badge" style="background:#BBDEFB;color:#0D47A1">TC</span><span class="badge" style="background:#FFF9C4;color:#7a5c00">INFO</span><span class="tag">Erasmus+</span></div>
+        <div class="card-dates" style="color:#bbb;font-style:italic">🗓 Dates à confirmer</div>
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody><tr>
+        <td><span class="sem-tag" style="background:#C8E6C9;color:#1B5E20">GEA</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#2E7D32;white-space:nowrap;padding-left:8px">2 pl.</td>
+      </tr><tr>
+        <td><span class="sem-tag" style="background:#BBDEFB;color:#0D47A1">TC</span></td>
+        <td style="color:#555;padding-left:4px">BUT3 — Semestre 5</td>
+        <td style="text-align:right;font-weight:600;color:#1565C0;white-space:nowrap;padding-left:8px">3 pl.</td>
+      </tr><tr>
+        <td><span class="sem-tag" style="background:#FFF9C4;color:#7a5c00">INFO</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 S3 ou BUT3 S5</td>
+        <td style="text-align:right;font-weight:600;color:#E6A800;white-space:nowrap;padding-left:8px">2 pl.</td>
+      </tr></tbody>
+        </table>
+        
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.hel.be/" target="_blank" rel="noopener">Haute École de la ville de Liège</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇧🇪</span>
+            <span class="card-num">#4</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Liège, Belgique</div>
+        <div class="badges"><span class="badge" style="background:#C8E6C9;color:#1B5E20">GEA</span><span class="tag">Erasmus+</span></div>
+        <div class="card-dates">🗓 Mi-septembre à mi-janvier</div>
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody><tr>
+        <td><span class="sem-tag" style="background:#C8E6C9;color:#1B5E20">GEA</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#2E7D32;white-space:nowrap;padding-left:8px">3 pl.</td>
+      </tr></tbody>
+        </table>
+        
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.ucll.be/en" target="_blank" rel="noopener">UC Leuven-Limburg</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇧🇪</span>
+            <span class="card-num">#5</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Louvain, Belgique</div>
+        <div class="badges"><span class="badge" style="background:#C8E6C9;color:#1B5E20">GEA</span><span class="badge" style="background:#BBDEFB;color:#0D47A1">TC</span><span class="badge" style="background:#FFF9C4;color:#7a5c00">INFO</span><span class="tag">Erasmus+</span></div>
+        <div class="card-dates" style="color:#bbb;font-style:italic">🗓 Dates à confirmer</div>
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody><tr>
+        <td><span class="sem-tag" style="background:#C8E6C9;color:#1B5E20">GEA</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#2E7D32;white-space:nowrap;padding-left:8px">1 pl.</td>
+      </tr><tr>
+        <td><span class="sem-tag" style="background:#BBDEFB;color:#0D47A1">TC</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#1565C0;white-space:nowrap;padding-left:8px">1 pl.</td>
+      </tr><tr>
+        <td><span class="sem-tag" style="background:#FFF9C4;color:#7a5c00">INFO</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 S3 ou BUT3 S5</td>
+        <td style="text-align:right;font-weight:600;color:#E6A800;white-space:nowrap;padding-left:8px">1 pl.</td>
+      </tr></tbody>
+        </table>
+        
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.ujaen.es/" target="_blank" rel="noopener">Universidad de Jaén</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇪🇸</span>
+            <span class="card-num">#6</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Jaén, Espagne</div>
+        <div class="badges"><span class="badge" style="background:#C8E6C9;color:#1B5E20">GEA</span><span class="badge" style="background:#BBDEFB;color:#0D47A1">TC</span><span class="tag">Erasmus+</span></div>
+        <div class="card-dates">🗓 Mi-septembre à fin janvier</div>
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody><tr>
+        <td><span class="sem-tag" style="background:#C8E6C9;color:#1B5E20">GEA</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#2E7D32;white-space:nowrap;padding-left:8px">2 pl.</td>
+      </tr><tr>
+        <td><span class="sem-tag" style="background:#BBDEFB;color:#0D47A1">TC</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#1565C0;white-space:nowrap;padding-left:8px">2 pl.</td>
+      </tr></tbody>
+        </table>
+        
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.uma.es/" target="_blank" rel="noopener">Universidad de Malaga</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇪🇸</span>
+            <span class="card-num">#7</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Malaga, Espagne</div>
+        <div class="badges"><span class="badge" style="background:#C8E6C9;color:#1B5E20">GEA</span><span class="badge" style="background:#BBDEFB;color:#0D47A1">TC</span><span class="tag">Erasmus+</span></div>
+        <div class="card-dates">🗓 Début septembre à mi-janvier</div>
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody><tr>
+        <td><span class="sem-tag" style="background:#C8E6C9;color:#1B5E20">GEA</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#2E7D32;white-space:nowrap;padding-left:8px">2 pl.</td>
+      </tr><tr>
+        <td><span class="sem-tag" style="background:#BBDEFB;color:#0D47A1">TC</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#1565C0;white-space:nowrap;padding-left:8px">2 pl.</td>
+      </tr></tbody>
+        </table>
+        
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.uvigo.gal/" target="_blank" rel="noopener">Universidad de Vigo</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇪🇸</span>
+            <span class="card-num">#8</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Vigo, Espagne</div>
+        <div class="badges"><span class="badge" style="background:#C8E6C9;color:#1B5E20">GEA</span><span class="badge" style="background:#BBDEFB;color:#0D47A1">TC</span><span class="tag">Erasmus+</span></div>
+        <div class="card-dates">🗓 Mi-septembre à mi-janvier</div>
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody><tr>
+        <td><span class="sem-tag" style="background:#C8E6C9;color:#1B5E20">GEA</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#2E7D32;white-space:nowrap;padding-left:8px">2 pl.</td>
+      </tr><tr>
+        <td><span class="sem-tag" style="background:#BBDEFB;color:#0D47A1">TC</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#1565C0;white-space:nowrap;padding-left:8px">2 pl.</td>
+      </tr></tbody>
+        </table>
+        
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.uef.fi/en" target="_blank" rel="noopener">University of Eastern Finland</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇫🇮</span>
+            <span class="card-num">#9</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Joensuu, Finlande</div>
+        <div class="badges"><span class="badge" style="background:#FFF9C4;color:#7a5c00">INFO</span><span class="tag">Erasmus+</span></div>
+        <div class="card-dates">🗓 Début septembre à fin décembre</div>
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody><tr>
+        <td><span class="sem-tag" style="background:#FFF9C4;color:#7a5c00">INFO</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 S3 ou BUT3 S5</td>
+        <td style="text-align:right;font-weight:600;color:#E6A800;white-space:nowrap;padding-left:8px">2 pl.</td>
+      </tr></tbody>
+        </table>
+        
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.tudublin.ie/" target="_blank" rel="noopener">Technological University Dublin</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇮🇪</span>
+            <span class="card-num">#10</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Dublin, Irlande</div>
+        <div class="badges"><span class="badge" style="background:#FFF9C4;color:#7a5c00">INFO</span><span class="tag">Erasmus+</span></div>
+        <div class="card-dates">🗓 Début septembre à fin janvier</div>
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody><tr>
+        <td><span class="sem-tag" style="background:#FFF9C4;color:#7a5c00">INFO</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 S3 ou BUT3 S5</td>
+        <td style="text-align:right;font-weight:600;color:#E6A800;white-space:nowrap;padding-left:8px">2 pl.</td>
+      </tr></tbody>
+        </table>
+        
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.iscap.ipp.pt/" target="_blank" rel="noopener">Instituto Superior de Contabilidade e Administração do Porto</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇵🇹</span>
+            <span class="card-num">#11</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Porto, Portugal</div>
+        <div class="badges"><span class="badge" style="background:#C8E6C9;color:#1B5E20">GEA</span><span class="badge" style="background:#BBDEFB;color:#0D47A1">TC</span><span class="tag">Erasmus+</span></div>
+        <div class="card-dates">🗓 Mi-septembre à mi-janvier</div>
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody><tr>
+        <td><span class="sem-tag" style="background:#C8E6C9;color:#1B5E20">GEA</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#2E7D32;white-space:nowrap;padding-left:8px">2 pl.</td>
+      </tr><tr>
+        <td><span class="sem-tag" style="background:#BBDEFB;color:#0D47A1">TC</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#1565C0;white-space:nowrap;padding-left:8px">2 pl.</td>
+      </tr></tbody>
+        </table>
+        
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.vutbr.cz/en/" target="_blank" rel="noopener">Brno University of Technology</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇨🇿</span>
+            <span class="card-num">#12</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Brno, Rép. Tchèque</div>
+        <div class="badges"><span class="badge" style="background:#FFF9C4;color:#7a5c00">INFO</span><span class="tag">Erasmus+</span></div>
+        <div class="card-dates">🗓 Mi-septembre à fin janvier</div>
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody><tr>
+        <td><span class="sem-tag" style="background:#FFF9C4;color:#7a5c00">INFO</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 S3 ou BUT3 S5</td>
+        <td style="text-align:right;font-weight:600;color:#E6A800;white-space:nowrap;padding-left:8px">2 pl.</td>
+      </tr></tbody>
+        </table>
+        
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.jcu.cz/en/" target="_blank" rel="noopener">University of South Bohemia</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇨🇿</span>
+            <span class="card-num">#13</span>
+          </div>
+        </div>
+        <div class="card-city">📍 České Budějovice, Rép. Tchèque</div>
+        <div class="badges"><span class="badge" style="background:#C8E6C9;color:#1B5E20">GEA</span><span class="badge" style="background:#BBDEFB;color:#0D47A1">TC</span><span class="tag">Erasmus+</span></div>
+        <div class="card-dates">🗓 Mi-septembre à fin décembre</div>
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody><tr>
+        <td><span class="sem-tag" style="background:#C8E6C9;color:#1B5E20">GEA</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#2E7D32;white-space:nowrap;padding-left:8px">2 pl.</td>
+      </tr><tr>
+        <td><span class="sem-tag" style="background:#BBDEFB;color:#0D47A1">TC</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#1565C0;white-space:nowrap;padding-left:8px">3 pl.</td>
+      </tr><tr>
+        <td><span class="sem-tag" style="background:#BBDEFB;color:#0D47A1">TC</span></td>
+        <td style="color:#555;padding-left:4px">BUT3 — Semestre 5</td>
+        <td style="text-align:right;font-weight:600;color:#1565C0;white-space:nowrap;padding-left:8px">3 pl.</td>
+      </tr></tbody>
+        </table>
+        
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.umb.sk/en/" target="_blank" rel="noopener">Univerzita Mateja Bela</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇸🇰</span>
+            <span class="card-num">#14</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Banská Bystrica, Slovaquie</div>
+        <div class="badges"><span class="badge" style="background:#BBDEFB;color:#0D47A1">TC</span><span class="tag">Erasmus+</span></div>
+        <div class="card-dates" style="color:#bbb;font-style:italic">🗓 Dates à confirmer</div>
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody><tr>
+        <td><span class="sem-tag" style="background:#BBDEFB;color:#0D47A1">TC</span></td>
+        <td style="color:#555;padding-left:4px">BUT3 — Semestre 5</td>
+        <td style="text-align:right;font-weight:600;color:#1565C0;white-space:nowrap;padding-left:8px">5 pl.</td>
+      </tr></tbody>
+        </table>
+        
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://ibcm.edu.rs/" target="_blank" rel="noopener">Public International Business College Mitrovica (IBCM)</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇽🇰</span>
+            <span class="card-num">#15</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Mitrovica, Kosovo</div>
+        <div class="badges"><span class="badge" style="background:#BBDEFB;color:#0D47A1">TC</span><span class="tag">Accord bilatéral</span></div>
+        <div class="card-dates" style="color:#bbb;font-style:italic">🗓 Dates à confirmer</div>
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody><tr>
+        <td><span class="sem-tag" style="background:#BBDEFB;color:#0D47A1">TC</span></td>
+        <td style="color:#555;padding-left:4px">BUT3 — Semestre 5</td>
+        <td style="text-align:right;font-weight:600;color:#1565C0;white-space:nowrap;padding-left:8px">5 pl.</td>
+      </tr></tbody>
+        </table>
+        
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.cgodin.qc.ca/" target="_blank" rel="noopener">Cégep Gérald-Godin</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇨🇦</span>
+            <span class="card-num">#16</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Montréal, Canada</div>
+        <div class="badges"><span class="badge" style="background:#C8E6C9;color:#1B5E20">GEA</span><span class="badge" style="background:#FFF9C4;color:#7a5c00">INFO</span><span class="tag">Accord bilatéral</span></div>
+        <div class="card-dates">🗓 Mi-août à fin décembre</div>
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody><tr>
+        <td><span class="sem-tag" style="background:#C8E6C9;color:#1B5E20">GEA</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#2E7D32;white-space:nowrap;padding-left:8px">6 pl.</td>
+      </tr><tr>
+        <td><span class="sem-tag" style="background:#FFF9C4;color:#7a5c00">INFO</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 S3 ou BUT3 S5</td>
+        <td style="text-align:right;font-weight:600;color:#E6A800;white-space:nowrap;padding-left:8px">4* pl.</td>
+      </tr></tbody>
+        </table>
+        <div style="font-size:10px;color:#bbb">* uniquement en BUT2 pour INFO</div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://vaniercollege.qc.ca/" target="_blank" rel="noopener">Cégep Vanier College</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇨🇦</span>
+            <span class="card-num">#17</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Montréal, Canada</div>
+        <div class="badges"><span class="badge" style="background:#BBDEFB;color:#0D47A1">TC</span><span class="tag">Accord bilatéral</span></div>
+        <div class="card-dates">🗓 Mi-août à mi-décembre</div>
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody><tr>
+        <td><span class="sem-tag" style="background:#BBDEFB;color:#0D47A1">TC</span></td>
+        <td style="color:#555;padding-left:4px">BUT2 — Semestre 3</td>
+        <td style="text-align:right;font-weight:600;color:#1565C0;white-space:nowrap;padding-left:8px">5 pl.</td>
+      </tr></tbody>
+        </table>
+        
+      </div></div>
+  </div>
+
+  <!-- TAB 2 : ANNEES -->
+  <div class="tab-panel" id="tab-annees">
+    <div class="info-banner">
+      <strong>Double diplôme BUT3</strong> — La mobilité en BUT3 permet 
+d'obtenir le Bachelor Universitaire de Technologie (IUT de Vannes) et le
+ Baccalauréat universitaire canadien. Ces deux diplômes sont de grade 
+Licence (Bac+3). <em>Sauf BUT GEA CG2P.</em>
+    </div>
+    <div class="totals">
+      <div class="total-card"><div class="total-num">3</div><div class="total-label">destinations</div></div>
+      <div class="total-card"><div class="total-num">30</div><div class="total-label">places totales</div></div>
+      <div class="total-card" style="border-left:3px solid #2E7D32"><div class="total-num" style="color:#2E7D32">6</div><div class="total-label">places GEA*</div></div>
+      <div class="total-card" style="border-left:3px solid #1565C0"><div class="total-num" style="color:#1565C0">8</div><div class="total-label">places TC</div></div>
+      <div class="total-card" style="border-left:3px solid #E6A800"><div class="total-num" style="color:#E6A800">10</div><div class="total-label">places INFO</div></div>
+      <div class="total-card" style="border-left:3px solid #C62828"><div class="total-num" style="color:#C62828">6</div><div class="total-label">places SD</div></div>
+    </div>
+    <div class="filters">
+      <span class="filter-label">Filtrer :</span>
+      <button class="filter-btn active" onclick="filterAn('all', this)" style="background: rgb(68, 68, 68);">Toutes</button>
+      <button class="filter-btn" onclick="filterAn('GEA', this)">GEA*</button>
+      <button class="filter-btn" onclick="filterAn('TC', this)">TC</button>
+      <button class="filter-btn" onclick="filterAn('INFO', this)">INFO</button>
+      <button class="filter-btn" onclick="filterAn('SD', this)">SD</button>
+    </div>
+    <div class="count" id="count-an">3 destinations</div>
+    <div class="cards" id="cards-an">
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.th-ab.de/en/" target="_blank" rel="noopener">University of Applied Sciences</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇩🇪</span>
+            <span class="card-num">#1</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Aschaffenburg, Allemagne</div>
+        <div class="badges"><span class="badge" style="background:#BBDEFB;color:#0D47A1">TC</span></div>
+        <div class="card-dates">🗓 Fin septembre à juin</div>
+        <div style="font-size:11px;color:#999">🎓 Places BUT3 : <span style="color:#1565C0;font-weight:600">TC : 2</span></div>
+      </div>
+      <div class="card double">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.uqac.ca/" target="_blank" rel="noopener">UQAC — Université du Québec à Chicoutimi</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇨🇦</span>
+            <span class="card-num">#2</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Chicoutimi, Canada</div>
+        <div class="badges"><span class="badge" style="background:#C8E6C9;color:#1B5E20">GEA</span><span class="badge" style="background:#BBDEFB;color:#0D47A1">TC</span><span class="badge" style="background:#FFF9C4;color:#7a5c00">INFO</span><span class="badge" style="background:#FFCDD2;color:#7f0000">SD</span><span class="tag" style="background:#fff9e6;border-color:#f7d87a;color:#7a5c00">Double diplôme</span></div>
+        <div class="card-dates">🗓 Fin août à fin avril</div>
+        <div style="font-size:11px;color:#999">🎓 Places BUT3 : <span style="color:#2E7D32;font-weight:600">GEA : 6</span> · <span style="color:#1565C0;font-weight:600">TC : 6</span> · <span style="color:#E6A800;font-weight:600">INFO : 6</span> · <span style="color:#C62828;font-weight:600">SD : 6</span></div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="https://www.etsmtl.ca/" target="_blank" rel="noopener">ETS — École de Technologie Supérieure</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">🇨🇦</span>
+            <span class="card-num">#3</span>
+          </div>
+        </div>
+        <div class="card-city">📍 Montréal, Canada</div>
+        <div class="badges"><span class="badge" style="background:#FFF9C4;color:#7a5c00">INFO</span></div>
+        <div class="card-dates" style="color:#bbb;font-style:italic">🗓 Dates à confirmer</div>
+        <div style="font-size:11px;color:#999">🎓 Places BUT3 : <span style="color:#E6A800;font-weight:600">INFO : 4</span></div>
+      </div></div>
+  </div>
+</div>
+
+<script>
+// GEA=vert, INFO=jaune, TC=bleu, SD=rouge
+const badgeColors = {
+  GEA:  { bg:'#C8E6C9', color:'#1B5E20' },
+  INFO: { bg:'#FFF9C4', color:'#7a5c00' },
+  TC:   { bg:'#BBDEFB', color:'#0D47A1' },
+  SD:   { bg:'#FFCDD2', color:'#7f0000' },
+};
+const filterColors = {
+  all:'#444444', GEA:'#2E7D32', TC:'#1565C0', INFO:'#E6A800', SD:'#C62828'
+};
+
+// semdetail: par formation, liste de { sem: label affiché, places: nb }
+// GEA → col 8 = BUT2 S3 seulement
+// TC  → col 9 = BUT2 S3, col 10 = BUT3 S5
+// INFO → col 11 = BUT2 S3 ou BUT3 S5 (les deux semestres possibles, même quota)
+
+const semestres = [
+  {
+    num:1, pays:'Allemagne', flag:'🇩🇪',
+    uni:'University of Applied Sciences', url:'https://www.th-ab.de/en/',
+    ville:'Aschaffenburg', programme:'Erasmus+', dates:'Fin septembre à mi-février',
+    semdetail: [
+      { formation:'GEA', sem:'BUT2 — Semestre 3', places:2 },
+    ]
+  },
+  {
+    num:2, pays:'Allemagne', flag:'🇩🇪',
+    uni:'University of Business and Society', url:'https://www.hwg-lu.de/en',
+    ville:'Ludwigshafen', programme:'Erasmus+', dates:'Mi-septembre à mi-février',
+    semdetail: [
+      { formation:'GEA', sem:'BUT2 — Semestre 3', places:3 },
+    ]
+  },
+  {
+    num:3, pays:'Belgique', flag:'🇧🇪',
+    uni:'University of Applied Sciences of Vives', url:'https://www.vives.be/en',
+    ville:'Courtrai', programme:'Erasmus+', dates:null,
+    semdetail: [
+      { formation:'GEA',  sem:'BUT2 — Semestre 3', places:2 },
+      { formation:'TC',   sem:'BUT3 — Semestre 5', places:3 },
+      { formation:'INFO', sem:'BUT2 S3 ou BUT3 S5', places:2 },
+    ]
+  },
+  {
+    num:4, pays:'Belgique', flag:'🇧🇪',
+    uni:'Haute École de la ville de Liège', url:'https://www.hel.be/',
+    ville:'Liège', programme:'Erasmus+', dates:'Mi-septembre à mi-janvier',
+    semdetail: [
+      { formation:'GEA', sem:'BUT2 — Semestre 3', places:3 },
+    ]
+  },
+  {
+    num:5, pays:'Belgique', flag:'🇧🇪',
+    uni:'UC Leuven-Limburg', url:'https://www.ucll.be/en',
+    ville:'Louvain', programme:'Erasmus+', dates:null,
+    semdetail: [
+      { formation:'GEA',  sem:'BUT2 — Semestre 3', places:1 },
+      { formation:'TC',   sem:'BUT2 — Semestre 3', places:1 },
+      { formation:'INFO', sem:'BUT2 S3 ou BUT3 S5', places:1 },
+    ]
+  },
+  {
+    num:6, pays:'Espagne', flag:'🇪🇸',
+    uni:'Universidad de Jaén', url:'https://www.ujaen.es/',
+    ville:'Jaén', programme:'Erasmus+', dates:'Mi-septembre à fin janvier',
+    semdetail: [
+      { formation:'GEA', sem:'BUT2 — Semestre 3', places:2 },
+      { formation:'TC',  sem:'BUT2 — Semestre 3', places:2 },
+    ]
+  },
+  {
+    num:7, pays:'Espagne', flag:'🇪🇸',
+    uni:'Universidad de Malaga', url:'https://www.uma.es/',
+    ville:'Malaga', programme:'Erasmus+', dates:'Début septembre à mi-janvier',
+    semdetail: [
+      { formation:'GEA', sem:'BUT2 — Semestre 3', places:2 },
+      { formation:'TC',  sem:'BUT2 — Semestre 3', places:2 },
+    ]
+  },
+  {
+    num:8, pays:'Espagne', flag:'🇪🇸',
+    uni:'Universidad de Vigo', url:'https://www.uvigo.gal/',
+    ville:'Vigo', programme:'Erasmus+', dates:'Mi-septembre à mi-janvier',
+    semdetail: [
+      { formation:'GEA', sem:'BUT2 — Semestre 3', places:2 },
+      { formation:'TC',  sem:'BUT2 — Semestre 3', places:2 },
+    ]
+  },
+  {
+    num:9, pays:'Finlande', flag:'🇫🇮',
+    uni:'University of Eastern Finland', url:'https://www.uef.fi/en',
+    ville:'Joensuu', programme:'Erasmus+', dates:'Début septembre à fin décembre',
+    semdetail: [
+      { formation:'INFO', sem:'BUT2 S3 ou BUT3 S5', places:2 },
+    ]
+  },
+  {
+    num:10, pays:'Irlande', flag:'🇮🇪',
+    uni:'Technological University Dublin', url:'https://www.tudublin.ie/',
+    ville:'Dublin', programme:'Erasmus+', dates:'Début septembre à fin janvier',
+    semdetail: [
+      { formation:'INFO', sem:'BUT2 S3 ou BUT3 S5', places:2 },
+    ]
+  },
+  {
+    num:11, pays:'Portugal', flag:'🇵🇹',
+    uni:'Instituto Superior de Contabilidade e Administração do Porto', url:'https://www.iscap.ipp.pt/',
+    ville:'Porto', programme:'Erasmus+', dates:'Mi-septembre à mi-janvier',
+    semdetail: [
+      { formation:'GEA', sem:'BUT2 — Semestre 3', places:2 },
+      { formation:'TC',  sem:'BUT2 — Semestre 3', places:2 },
+    ]
+  },
+  {
+    num:12, pays:'Rép. Tchèque', flag:'🇨🇿',
+    uni:'Brno University of Technology', url:'https://www.vutbr.cz/en/',
+    ville:'Brno', programme:'Erasmus+', dates:'Mi-septembre à fin janvier',
+    semdetail: [
+      { formation:'INFO', sem:'BUT2 S3 ou BUT3 S5', places:2 },
+    ]
+  },
+  {
+    num:13, pays:'Rép. Tchèque', flag:'🇨🇿',
+    uni:'University of South Bohemia', url:'https://www.jcu.cz/en/',
+    ville:'České Budějovice', programme:'Erasmus+', dates:'Mi-septembre à fin décembre',
+    semdetail: [
+      { formation:'GEA', sem:'BUT2 — Semestre 3', places:2 },
+      { formation:'TC',  sem:'BUT2 — Semestre 3', places:3 },
+      { formation:'TC',  sem:'BUT3 — Semestre 5', places:3 },
+    ]
+  },
+  {
+    num:14, pays:'Slovaquie', flag:'🇸🇰',
+    uni:'Univerzita Mateja Bela', url:'https://www.umb.sk/en/',
+    ville:'Banská Bystrica', programme:'Erasmus+', dates:null,
+    semdetail: [
+      { formation:'TC', sem:'BUT3 — Semestre 5', places:5 },
+    ]
+  },
+  {
+    num:15, pays:'Kosovo', flag:'🇽🇰',
+    uni:'Public International Business College Mitrovica (IBCM)', url:'https://ibcm.edu.rs/',
+    ville:'Mitrovica', programme:'Accord bilatéral', dates:null,
+    semdetail: [
+      { formation:'TC', sem:'BUT3 — Semestre 5', places:5 },
+    ]
+  },
+  {
+    num:16, pays:'Canada', flag:'🇨🇦',
+    uni:'Cégep Gérald-Godin', url:'https://www.cgodin.qc.ca/',
+    ville:'Montréal', programme:'Accord bilatéral', dates:'Mi-août à fin décembre',
+    note:'* uniquement en BUT2 pour INFO',
+    semdetail: [
+      { formation:'GEA',  sem:'BUT2 — Semestre 3', places:6 },
+      { formation:'INFO', sem:'BUT2 S3 ou BUT3 S5', places:'4*' },
+    ]
+  },
+  {
+    num:17, pays:'Canada', flag:'🇨🇦',
+    uni:'Cégep Vanier College', url:'https://vaniercollege.qc.ca/',
+    ville:'Montréal', programme:'Accord bilatéral', dates:'Mi-août à mi-décembre',
+    semdetail: [
+      { formation:'TC', sem:'BUT2 — Semestre 3', places:5 },
+    ]
+  },
+];
+
+const annees = [
+  {
+    num:1, pays:'Allemagne', flag:'🇩🇪',
+    uni:'University of Applied Sciences', url:'https://www.th-ab.de/en/',
+    ville:'Aschaffenburg', formations:['TC'],
+    places:{ TC:2 }, diplome:false, dates:'Fin septembre à juin'
+  },
+  {
+    num:2, pays:'Canada', flag:'🇨🇦',
+    uni:'UQAC — Université du Québec à Chicoutimi', url:'https://www.uqac.ca/',
+    ville:'Chicoutimi', formations:['GEA','TC','INFO','SD'],
+    places:{ GEA:6, TC:6, INFO:6, SD:6 }, diplome:true, dates:'Fin août à fin avril'
+  },
+  {
+    num:3, pays:'Canada', flag:'🇨🇦',
+    uni:'ETS — École de Technologie Supérieure', url:'https://www.etsmtl.ca/',
+    ville:'Montréal', formations:['INFO'],
+    places:{ INFO:4 }, diplome:false, dates:null
+  },
+];
+
+// ── render semestre cards ──────────────────────────────────────────────────────
+function renderSem(filter) {
+  const container = document.getElementById('cards-sem');
+  container.innerHTML = '';
+  const filtered = semestres.filter(d =>
+    filter === 'all' || d.semdetail.some(s => s.formation === filter)
+  );
+  document.getElementById('count-sem').textContent =
+    filtered.length + ' destination' + (filtered.length > 1 ? 's' : '');
+  if (!filtered.length) {
+    container.innerHTML = '<div class="no-results">Aucune destination pour cette formation.</div>';
+    return;
+  }
+  filtered.forEach(d => {
+    // unique formations for badges
+    const formations = [...new Set(d.semdetail.map(s => s.formation))];
+    const badges = formations.map(f => {
+      const c = badgeColors[f] || { bg:'#eee', color:'#333' };
+      return `<span class="badge" style="background:${c.bg};color:${c.color}">${f}</span>`;
+    }).join('');
+
+    // build semester detail rows — merge TC lines with same sem label
+    const rows = d.semdetail.map(s => {
+      const c = badgeColors[s.formation] || { bg:'#eee', color:'#333' };
+      return `<tr>
+        <td><span class="sem-tag" style="background:${c.bg};color:${c.color}">${s.formation}</span></td>
+        <td style="color:#555;padding-left:4px">${s.sem}</td>
+        <td style="text-align:right;font-weight:600;color:${filterColors[s.formation]||'#555'};white-space:nowrap;padding-left:8px">${s.places} pl.</td>
+      </tr>`;
+    }).join('');
+
+    const datesHtml = d.dates
+      ? `<div class="card-dates">🗓 ${d.dates}</div>`
+      : `<div class="card-dates" style="color:#bbb;font-style:italic">🗓 Dates à confirmer</div>`;
+
+    container.innerHTML += `
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name"><a href="${d.url}" target="_blank" rel="noopener">${d.uni}</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">${d.flag}</span>
+            <span class="card-num">#${d.num}</span>
+          </div>
+        </div>
+        <div class="card-city">📍 ${d.ville}, ${d.pays}</div>
+        <div class="badges">${badges}<span class="tag">${d.programme}</span></div>
+        ${datesHtml}
+        <table class="semtable">
+          <thead><tr>
+            <th>Formation</th>
+            <th style="padding-left:4px">Semestre</th>
+            <th style="text-align:right;padding-left:8px">Places</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+        ${d.note ? `<div style="font-size:10px;color:#bbb">${d.note}</div>` : ''}
+      </div>`;
+  });
+}
+
+// ── render annees cards ───────────────────────────────────────────────────────
+function renderAn(filter) {
+  const container = document.getElementById('cards-an');
+  container.innerHTML = '';
+  const filtered = annees.filter(d =>
+    filter === 'all' || d.formations.includes(filter)
+  );
+  document.getElementById('count-an').textContent =
+    filtered.length + ' destination' + (filtered.length > 1 ? 's' : '');
+  if (!filtered.length) {
+    container.innerHTML = '<div class="no-results">Aucune destination pour cette formation.</div>';
+    return;
+  }
+  filtered.forEach(d => {
+    const badges = d.formations.map(f => {
+      const c = badgeColors[f] || { bg:'#eee', color:'#333' };
+      return `<span class="badge" style="background:${c.bg};color:${c.color}">${f}</span>`;
+    }).join('');
+    const placesDetail = Object.entries(d.places)
+      .map(([f,n]) => `<span style="color:${filterColors[f]||'#555'};font-weight:600">${f} : ${n}</span>`)
+      .join(' · ');
+    const diplomeTag = d.diplome
+      ? `<span class="tag" style="background:#fff9e6;border-color:#f7d87a;color:#7a5c00">Double diplôme</span>`
+      : '';
+    const datesHtml = d.dates
+      ? `<div class="card-dates">🗓 ${d.dates}</div>`
+      : `<div class="card-dates" style="color:#bbb;font-style:italic">🗓 Dates à confirmer</div>`;
+    container.innerHTML += `
+      <div class="card${d.diplome ? ' double' : ''}">
+        <div class="card-top">
+          <div class="card-name"><a href="${d.url}" target="_blank" rel="noopener">${d.uni}</a></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <span style="font-size:22px;line-height:1">${d.flag}</span>
+            <span class="card-num">#${d.num}</span>
+          </div>
+        </div>
+        <div class="card-city">📍 ${d.ville}, ${d.pays}</div>
+        <div class="badges">${badges}${diplomeTag}</div>
+        ${datesHtml}
+        <div style="font-size:11px;color:#999">🎓 Places BUT3 : ${placesDetail}</div>
+      </div>`;
+  });
+}
+
+// ── filters ───────────────────────────────────────────────────────────────────
+function filterSem(f, btn) {
+  document.querySelectorAll('#tab-semestres .filter-btn').forEach(b => {
+    b.classList.remove('active'); b.style.background=''; b.style.color=''; b.style.borderColor='';
+  });
+  btn.classList.add('active');
+  btn.style.background = filterColors[f] || '#444';
+  btn.style.color = (f === 'INFO') ? '#1a1a18' : 'white';
+  renderSem(f);
+}
+function filterAn(f, btn) {
+  document.querySelectorAll('#tab-annees .filter-btn').forEach(b => {
+    b.classList.remove('active'); b.style.background=''; b.style.color=''; b.style.borderColor='';
+  });
+  btn.classList.add('active');
+  btn.style.background = filterColors[f] || '#444';
+  btn.style.color = (f === 'INFO') ? '#1a1a18' : 'white';
+  renderAn(f);
+}
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+}
+
+// ── init ──────────────────────────────────────────────────────────────────────
+renderSem('all');
+renderAn('all');
+document.querySelector('#tab-semestres .filter-btn.active').style.background = filterColors['all'];
+document.querySelector('#tab-annees .filter-btn.active').style.background = filterColors['all'];
+</script>
+
+
+</body></html>
