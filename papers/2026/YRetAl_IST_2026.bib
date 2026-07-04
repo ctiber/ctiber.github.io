@@ -1,0 +1,22 @@
+@article{ROMANI2026108141,
+title = {A data-centric method for microservice identification: From data models analysis to source code assignment},
+journal = {Information and Software Technology},
+volume = {195},
+pages = {108141},
+year = {2026},
+issn = {0950-5849},
+doi = {https://doi.org/10.1016/j.infsof.2026.108141},
+url = {https://www.sciencedirect.com/science/article/pii/S0950584926001308},
+author = {Yamina Romani and Okba Tibermacine and Chouki Tibermacine},
+keywords = {Microservices, Database-per-service pattern, Monolithic to microservice migration, Software architecture, Topic identification, Clustering, Source code assignment},
+abstract = {Context:
+Microservice-based architecture has emerged as a robust architectural style for developing software systems as loosely coupled modules with several high-quality characteristics. Given characteristics like maintainability, independent deployability, and scalability, many practitioners embrace this architectural style while developing new applications or migrating existing monolithic ones.
+Objective:
+In this paper, we address the migration process, which is an exhausting task that requires splitting the monolithic software system into a set of highly internally-cohesive and loosely externally-coupled services. Our objective is to design and empirically evaluate an automated microservice decomposition approach driven by the database model of a monolithic system, aiming to maximize modularity and cohesion while minimizing inter-service coupling.
+Method:
+Our proposed process takes a data model-centric perspective. We argue that microservice identification cannot rely on source code analysis only, because the source code of the monolith was not originally written with a microservice-based architecture style in mind. Later in the migration process, this code must be modified to match the new architecture. The identification of microservice candidates is divided into two stages. In the first stage, topic modeling is performed to decompose the monolithic system’s database model into sub-models. Each derived sub-model refers to a potential microservice’s independent database. In the second stage, the monolith’s source code is analyzed and distributed to the identified sub-models based on semantic similarity and structural relationships among source code elements.
+Results:
+We evaluated our approach on two open-source applications with available microservice versions and obtained promising results. We also compared it with existing methods using four state-of-the-art modularity and cohesion metrics on three common open-source projects. The findings show that our approach effectively identifies modular and cohesive microservices.
+Conclusion:
+In this paper, we demonstrate that considering data models as the preliminary drivers for microservices identification provides an effective approach for defining microservice boundaries.}
+}
