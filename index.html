@@ -110,16 +110,85 @@
             font-weight: bold;
             margin-top: 20px;
         }
+        .paper-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin: 2px 6px 2px 0;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.15s ease, color 0.15s ease;
+        }
+        .paper-link svg {
+            flex-shrink: 0;
+        }
+        .pdf-link {
+            color: #b91c1c;
+            background-color: #fee2e2;
+        }
+        .pdf-link:hover {
+            background-color: #b91c1c;
+            color: #fff;
+        }
+        .bib-link {
+            color: #1d4ed8;
+            background-color: #dbeafe;
+            cursor: pointer;
+        }
+        .bib-link:hover {
+            background-color: #1d4ed8;
+            color: #fff;
+        }
+        dialog#bib-modal {
+            border: none;
+            border-radius: 8px;
+            padding: 0;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        dialog#bib-modal::backdrop {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .bib-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #eee;
+        }
+        .bib-modal-header h3 {
+            margin: 0;
+            font-size: 1em;
+        }
+        .bib-modal-body {
+            padding: 16px;
+            max-height: 50vh;
+            overflow: auto;
+        }
+        .bib-modal-body pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 0.85em;
+            margin: 0;
+        }
+        .bib-modal-actions {
+            display: flex;
+            gap: 8px;
+            padding: 0 16px 16px;
+        }
+        .bib-modal-actions button, .bib-modal-header button {
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background: #f4f4f9;
+            border-radius: 5px;
+            padding: 4px 10px;
+            font-size: 0.85em;
+        }
     </style>
-    <script language="JavaScript">
-			<!--
-			function open_win(bibtex_entry) {
-			
-			window.open(bibtex_entry,'bib','toolbar=no,location=no, directories=no, status=yes, menubar=no, resizable=yes, copyhistory=no, scrollbars=yes, width=550, height=250');
-			}
-			
-			// -->
-		</script>		
 </head>
 <body>
     <div class="container">
@@ -199,64 +268,32 @@ Vauttier. Assisting the Development of Privacy-aware Software: The PRIAM Tooled 
 
             <div class="publication-year">2025</div>
             <p>Soundos Benni, Meriem Hathat, Jeisson Vergara-Vargas, Soumia Zellagui, <b>Chouki Tibermacine</b> and Salah Sadou. Predicting Security Weaknesses in Microservice Architectures using Structural Metrics. In proceedings of the 23rd International Conference on Service-Oriented Computing (<a href="https://icsoc2025.hit.edu.cn" target="_blank">ICSOC'2025</a>), December 1 - 4, 2025, Shenzhen, China. Springer.
-                <a href="papers/2025/SBetAl_ICSOC_2025.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2025/SBetAl_ICSOC_2025.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+                <a href="papers/2025/SBetAl_ICSOC_2025.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2025/SBetAl_ICSOC_2025.bib" class="paper-link bib-link" data-bib="papers/2025/SBetAl_ICSOC_2025.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
             <p>
                 Thomas Georges, Marianne Huchard, Mélanie König, Clémentine Nebut and <b>Chouki Tibermacine</b>. Bridging the Gap between User Stories and Feature Models by Leveraging Version Control Systems: a Step towards Software Product Line Migration. In <a href="https://www.sciencedirect.com/journal/information-and-software-technology" target="_blank">Information and Software Technology</a> Journal. Volume 188, 2025.
-                <a href="papers/2025/TGetAl_IST_2025.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a>
-                <a href="javascript:open_win('papers/2025/TGetAl_IST_2025.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+                <a href="papers/2025/TGetAl_IST_2025.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a>
+                <a href="papers/2025/TGetAl_IST_2025.bib" class="paper-link bib-link" data-bib="papers/2025/TGetAl_IST_2025.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>            
 
             <div class="publication-year">2024</div>
             <p>Selena Lamari, Nadjia Benblidia, <b>Chouki Tibermacine</b>, Christelle Urtado, and Sylvain Vauttier. Leveraging a Microservice Architecture, Access Control and Interoperability Patterns to Manage Privacy-related User Consents. In proceedings of the 22nd International Conference on Service-Oriented Computing (<a href="https://icsoc2024.redcad.tn/" target="_blank">ICSOC'2024</a>), December 3 - 6, 2024, Tunis, Tunisia. Springer.
-                <a href="papers/2024/SLetAl_ICSOC_2024.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2024/SLetAl_ICSOC_2024.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+                <a href="papers/2024/SLetAl_ICSOC_2024.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2024/SLetAl_ICSOC_2024.bib" class="paper-link bib-link" data-bib="papers/2024/SLetAl_ICSOC_2024.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
             <p>Alexandre Bazin, Thomas Georges, Marianne Huchard, Pierre Martin and <b>Chouki Tibermacine</b>. Exploring the 3-Dimensional Variability of Websites' User-Stories using Triadic Concept Analysis. In Journal of Approximate Reasoning (<a href="https://www.sciencedirect.com/journal/international-journal-of-approximate-reasoning" target="_blank">IJAR</a>), Elsevier. 2024.
-                <a href="https://doi.org/10.1016/j.ijar.2024.109248" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
+                <a href="https://doi.org/10.1016/j.ijar.2024.109248" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
             </p>
             
 
           <p>Vincent Berry, Arnaud Castelltort, Benoit Lange, Joan Teriihoania, <b>Chouki Tibermacine</b> and Catia Trubiani. <i>Is It Worth Migrating a Monolith to Microservices? An Experience Report on Performance, Availability and Energy Usage</i>. In proceedings of the IEEE International Conference on Web Services (<a href="https://icws.conferences.computer.org/2024/" target="_blank">ICWS'2024</a>), Shenzhen, China, July 7-13 2024. IEEE CS. Acceptance rate: 19.56% (80/409)
-<a href="papers/2024/VBetAl_ICWS_2024.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2024/VBetAl_ICWS_2024.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+<a href="papers/2024/VBetAl_ICWS_2024.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2024/VBetAl_ICWS_2024.bib" class="paper-link bib-link" data-bib="papers/2024/VBetAl_ICWS_2024.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
           <p>Jeisson Vergara-Vargas, Salah Sadou, <b>Chouki Tibermacine</b> and Felipe Restrepo-Calle. <i>Sarch-Checks: A Method for Checking Software Architecture Security Properties using a Knowledge Graph</i>. In proceedings of the 21st IEEE International Conference on Software Architecture (<a href="https://conf.researchr.org/home/icsa-2024" target="_blank">ICSA 2024</a>), Hyderabad, India. IEEE CS, 2024. Acceptance rate: 35%
-<a href="papers/2024/JVetAl_ICSA_2024.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2024/JVetAl_ICSA_2024.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+<a href="papers/2024/JVetAl_ICSA_2024.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2024/JVetAl_ICSA_2024.bib" class="paper-link bib-link" data-bib="papers/2024/JVetAl_ICSA_2024.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
           </p>
           <div class="publication-year">2023</div>
         
@@ -266,37 +303,20 @@ Proceedings of the 17th European Conference on Software Architecture (ECSA 2023)
           </p>
           <p>
             Jeisson Vergara-Vargas, Felipe Restrepo-Calle, Salah Sadou and <b>Chouki Tibermacine</b>. Sarch-Knows: A Knowledge Graph for Modeling
-Security Scenarios at the Software Architecture Level. In proceedings of the 3rd International Workshop on Designing and Measuring Security in Software Architectures (DeMeSSa) workshop, published in the companion proceedings of the 17th European Conference on Software Architecture (ECSA 2023), Istanbul, Turkey. Springer.<a href="papers/2023/JVetAl_DEM_2023.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File"><img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2023/JVetAl_DEM_2023.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+Security Scenarios at the Software Architecture Level. In proceedings of the 3rd International Workshop on Designing and Measuring Security in Software Architectures (DeMeSSa) workshop, published in the companion proceedings of the 17th European Conference on Software Architecture (ECSA 2023), Istanbul, Turkey. Springer.<a href="papers/2023/JVetAl_DEM_2023.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2023/JVetAl_DEM_2023.bib" class="paper-link bib-link" data-bib="papers/2023/JVetAl_DEM_2023.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
         </p>         
         
             <p>Okba Tibermacine, <b>Chouki Tibermacine</b> and Foudil Cherif.  <i>A reputation assessment model for trustful service recommendation</i>. In Journal of Computer Standards and Interfaces  (<a href="https://www.sciencedirect.com/journal/computer-standards-and-interfaces" 
                     target="_blank">CSI</a>), Volume 84, March 2023. Elsevier
-<a href="papers/2023/OTetAl_CSI_2023.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2023/OTetAl_CSI_2023.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+<a href="papers/2023/OTetAl_CSI_2023.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2023/OTetAl_CSI_2023.bib" class="paper-link bib-link" data-bib="papers/2023/OTetAl_CSI_2023.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
 </li>         
             <p>Thomas Georges, Liam Rice, Marianne Huchard, Melanie Konig, Clementine Nebut and <b>Chouki Tibermacine</b>.  <i>Guiding Feature Models Synthesis from User-Stories: An
 Exploratory Approach</i>. In Proceedings of 17th International Working Conference on Variability Modelling of Software-Intensive Systems (<a href="https://vamos2023.sdu.dk/" 
                     target="_blank">VaMoS</a>), Odense, Denmark, January 2023. ACM Press.
-<a href="papers/2023/TGetAl_VAMOS_2023.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2023/TGetAl_VAMOS_2023.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+<a href="papers/2023/TGetAl_VAMOS_2023.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2023/TGetAl_VAMOS_2023.bib" class="paper-link bib-link" data-bib="papers/2023/TGetAl_VAMOS_2023.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
 </p>
 
 
@@ -304,125 +324,65 @@ Exploratory Approach</i>. In Proceedings of 17th International Working Conferenc
 
             <p>Vincent Berry, Arnaud Castelltort, Chrysta Pelissier, Marion Rousseau and <b>Chouki Tibermacine</b>.  <i>ShellOnYou: learning by doing Unix command line</i>. In Proceedings of the 27th Annual ACM Conference on Innovation and Technology in Computer Science Education 2022 (<a href="https://iticse.acm.org/2022/" 
                     target="_blank">ITiCSE</a>), July 2022. ACM Press. Acceptance rate: 29% (79/276).
-<a href="papers/2022/VBetAl_ITICSE_2022.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2022/VBetAl_ITICSE_2022.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+<a href="papers/2022/VBetAl_ITICSE_2022.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2022/VBetAl_ITICSE_2022.bib" class="paper-link bib-link" data-bib="papers/2022/VBetAl_ITICSE_2022.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
 </p>
             <p>Yamina Romani, Okba Tibermacine and <b>Chouki Tibermacine</b>.  <i>Towards Migrating Legacy Software Systems to
 Microservice-based Architectures:
 a Data-Centric Process for Microservice
 Identification</i>. In Proceedings of the 19th IEEE International Conference on Software Architecture - New and Emerging Ideas Track 2022 (<a href="https://icsa-conferences.org/2022/conference-tracks/new-and-emerging-ideas/" 
                     target="_blank">ICSA NEMI</a>), March 2022.
-<a href="papers/2022/YRetAl_ICSA_NEI_2022.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2022/YRetAl_ICSA_NEI_2022.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+<a href="papers/2022/YRetAl_ICSA_NEI_2022.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2022/YRetAl_ICSA_NEI_2022.bib" class="paper-link bib-link" data-bib="papers/2022/YRetAl_ICSA_NEI_2022.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
 </p>
 
         <div class="publication-year">2021</div>
             <p>Mohamed Lamine Kerdoudi, Tewfik Ziadi, <b>Chouki Tibermacine</b> and Salah Sadou.  <i>A Novel Approach for Software Architecture Product Line Engineering</i>. In Journal of Systems and Software (<a href="http://www.sciencedirect.com/journal/journal-of-systems-and-software/" 
                     target="_blank">JSS</a>), Accepted in December 2021. Published in Volume 186, April 2022, Elsevier.
-<a href="papers/2021/MLKetAl_JSS_2021.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2021/MLKetAl_JSS_2021.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+<a href="papers/2021/MLKetAl_JSS_2021.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2021/MLKetAl_JSS_2021.bib" class="paper-link bib-link" data-bib="papers/2021/MLKetAl_JSS_2021.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
 </p>
           <p>Elyes Cherfa, Soraya Kesraoui, <b>Chouki Tibermacine</b>, Régis Fleurquin and Salah Sadou. <i>Identifying Metamodel Inaccurate Structures During Metamodel/Constraints Co-Evolution</i>. In Proceedings of the ACM/IEEE 24th International Conference on Model Driven Engineering Languages and Systems (<a href="https://conf.researchr.org/home/models-2021" target="_blank">MODELS</a>), October 2021. Fukuoka, Japan (Virtual Event). IEEE Computer Society.
-<a href="papers/2021/ECetAl_MODELS_2021.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-<a href="javascript:open_win('papers/2021/ECetAl_MODELS_2021.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+<a href="papers/2021/ECetAl_MODELS_2021.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+<a href="papers/2021/ECetAl_MODELS_2021.bib" class="paper-link bib-link" data-bib="papers/2021/ECetAl_MODELS_2021.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
           <p>Thomas Georges,
 Marianne Huchard,
 Mélanie König,
 Clémentine Nebut and <b>Chouki Tibermacine</b>. <i>Variability Extraction from Simulator I/O Data Schemata in Agriculture Decision-Support Software</i>. In Proceedings of the 9th Workshop (<a href="https://fca4ai.hse.ru/2021/" target="_blank">FCA4AI</a>), co-located with IJCAI 2021, Montréal, Canada, August 2021. Virutal Event.
-<a href="papers/2021/TGetAl_FCA4AI_2021.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-<a href="javascript:open_win('papers/2021/TGetAl_FCA4AI_2021.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+<a href="papers/2021/TGetAl_FCA4AI_2021.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+<a href="papers/2021/TGetAl_FCA4AI_2021.bib" class="paper-link bib-link" data-bib="papers/2021/TGetAl_FCA4AI_2021.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
 
         <div class="publication-year">2020</div>
 
     <p>Mohammed Ismail Smahi, Fethallah Hadjila, <b>Chouki Tibermacine</b> and Abdelkrim Benamar. <i>A deep learning approach for collaborative prediction of Web service QoS</i>. <a href="https://link.springer.com/article/10.1007/s11761-020-00304-y" target="_blank">Service-Oriented Computing and Applications</a>, November 2020. Springer
-<a href="papers/2020/SMAetAl_SOCA_2020.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-<a href="javascript:open_win('papers/2020/SMAetAl_SOCA_2020.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+<a href="papers/2020/SMAetAl_SOCA_2020.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+<a href="papers/2020/SMAetAl_SOCA_2020.bib" class="paper-link bib-link" data-bib="papers/2020/SMAetAl_SOCA_2020.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
             <p>Elyes Cherfa, Soraya Kesraoui, <b>Chouki Tibermacine</b>, Régis Fleurquin and Salah Sadou. <i>On investigating Metamodel Inaccurate Structures</i>. In Proceedings of the 35th ACM/SIGAPP Symposium On Applied Computing (<a href="http://www.sigapp.org/sac/sac2020/" 
                     target="_blank">SAC'2020</a>), Software Engineering Track, March-April 2020. Brno, Czech Republic. ACM Press.
-<a href="papers/2020/ECetAl_SAC_2020.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-<a href="javascript:open_win('papers/2020/ECetAl_SAC_2020.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+<a href="papers/2020/ECetAl_SAC_2020.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+<a href="papers/2020/ECetAl_SAC_2020.bib" class="paper-link bib-link" data-bib="papers/2020/ECetAl_SAC_2020.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
 
         <div class="publication-year">2019</div>
 
             <p>Mohamed Lamine Kerdoudi, Tewfik Ziadi, <b>Chouki Tibermacine</b> and Salah Sadou.  <i>Recovering Software Architecture Product Lines</i>. In Proceedings of the 24th International Conference on Engineering of Complex Computer Systems (<a href="https://formal-analysis.com/iceccs/2019/" 
                     target="_blank">ICECCS'2019</a>), November 2019. Hong Kong, China. IEEE Computer Society. Acceptance rate: 24%.
-<a href="papers/2019/MLKetAl_ICECCS_2019.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2019/MLKetAl_ICECCS_2019.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+<a href="papers/2019/MLKetAl_ICECCS_2019.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2019/MLKetAl_ICECCS_2019.bib" class="paper-link bib-link" data-bib="papers/2019/MLKetAl_ICECCS_2019.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
 </p>
             <p>Okba Tibermacine, <b>Chouki Tibermacine</b> and Mohamed Lamine Kerdoudi. <i>Reputation Evaluation with Malicious Feedback Prevention Using a HITS-based Model</i>. In Proceedings of the IEEE International Conference on Web Services (<a href="https://conferences.computer.org/icws/2019" 
                     target="_blank">ICWS'2019</a>), July 2019. Milan, Italy. IEEE Computer Society. Acceptance rate: 20%.
-<a href="papers/2019/OTetAl_ICWS_2019.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2019/OTetAl_ICWS_2019.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+<a href="papers/2019/OTetAl_ICWS_2019.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2019/OTetAl_ICWS_2019.bib" class="paper-link bib-link" data-bib="papers/2019/OTetAl_ICWS_2019.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
 </p>
 
             <p>Nour Aboud, Gabriela Arévalo, Olivier Bendavid, Jean-Rémy Falleri, Nicolas Haderer, Marianne Huchard,  <b>Chouki Tibermacine</b>, Christelle Urtado and Sylvain Vauttier. <i>Building Hierarchical Component Directories</i>. In the Journal of Object Technology (<a href="http://www.jot.fm/" 
                     target="_blank">JOT</a>), Volume 18, Num 1. March 2019. Pages 1-37. AITO.
-<a href="http://www.jot.fm/issues/issue_2019_01/article2.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2019/NAetAl_JOT_2019.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+<a href="http://www.jot.fm/issues/issue_2019_01/article2.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2019/NAetAl_JOT_2019.bib" class="paper-link bib-link" data-bib="papers/2019/NAetAl_JOT_2019.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
 </p>
 
         <div class="publication-year">2018</div>
@@ -430,71 +390,35 @@ Clémentine Nebut and <b>Chouki Tibermacine</b>. <i>Variability Extraction from 
             <p>Okba Tibermacine, <b>Chouki Tibermacine</b> and Foudil Cherif. <i>Estimating the Reputation of Newcomer Web Services
                     Using a Regression-Based Method</i>. In the Journal of Systems and Software (<a href="http://www.sciencedirect.com/journal/journal-of-systems-and-software/" 
                     target="_blank">JSS</a>), Volume 145. August 2018. Pages 112-124. Elsevier.
-<a href="papers/2018/OTetAl_JSS_2018.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2018/OTetAl_JSS_2018.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+<a href="papers/2018/OTetAl_JSS_2018.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2018/OTetAl_JSS_2018.bib" class="paper-link bib-link" data-bib="papers/2018/OTetAl_JSS_2018.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
 </p>
             <p>Mohammed Ismail Smahi, Fethellah Hadjila, <b>Chouki Tibermacine</b>, Mohammed Merzoug and Abdelkrim Benamar. <i>An Encoder-Decoder Architecture for the
                     Prediction of Web Service QoS</i>. In Proceedings of the European Service-Oriented and Cloud Computing Conference 
-                    (ESOCC'2018). September 2018, Como, Italy. Pages 74--89, Springer. <a href="papers/2018/MISetAl_ESOCC_2018.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2018/MISetAl_ESOCC_2018.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+                    (ESOCC'2018). September 2018, Como, Italy. Pages 74--89, Springer. <a href="papers/2018/MISetAl_ESOCC_2018.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2018/MISetAl_ESOCC_2018.bib" class="paper-link bib-link" data-bib="papers/2018/MISetAl_ESOCC_2018.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
 </p>
             <p>Mohammed Lamine Kerdoudi, <b>Chouki Tibermacine</b> and Salah Sadou. <i>Spotlighting Use Case Specific Architectures</i>.
-              A short paper in Proceedings of the European Conference on Software Architecture (ECSA'2018). September 2018, Madrid, Spain. Pages 236--244, Springer. <a href="papers/2018/MLKetAl_ECSA_2018.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2018/MLKetAl_ECSA_2018.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+              A short paper in Proceedings of the European Conference on Software Architecture (ECSA'2018). September 2018, Madrid, Spain. Pages 236--244, Springer. <a href="papers/2018/MLKetAl_ECSA_2018.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2018/MLKetAl_ECSA_2018.bib" class="paper-link bib-link" data-bib="papers/2018/MLKetAl_ECSA_2018.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
 </p>           
             <p>
             Sahar Kallel, <b>Chouki Tibermacine</b>, Slim Kallel, Christophe Dony and Ahmed Hadj Kacem. <i>Specification and Automatic Checking of Architecture
 Constraints on Object Oriented Programs</i>. In the Journal of Information and Software Technology (<a href="https://www.sciencedirect.com/journal/information-and-software-technology" target="_blank">IST</a>). Volume 101. May 2018. Pages 16-31. Elsevier.
-            <a href="papers/2018/SKetAl_IST_2018.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2018/SKetAl_IST_2018.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+            <a href="papers/2018/SKetAl_IST_2018.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2018/SKetAl_IST_2018.bib" class="paper-link bib-link" data-bib="papers/2018/SKetAl_IST_2018.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
             <p>
             Anfel Selmadji, Abdelhak-Djamel Seriai, Hinde-Lilia Bouziane, Christophe Dony and <b>Chouki Tibermacine</b>.
 <i>Refactoring Object-Oriented Applications for a Deployment in the Cloud - Workflow Generation based on Static Analysis of Source Code</i>. In proceedings of the 13th International Conference on Evaluation of Novel Approaches to Software Engineering (ENASE'18), Funchal, Madeira, Portugal, March 23-24, 2018. Pages 111-123.
-            <a href="papers/2018/ASetAl_ENASE_2018.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2018/ASetAl_ENASE_2018.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+            <a href="papers/2018/ASetAl_ENASE_2018.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2018/ASetAl_ENASE_2018.bib" class="paper-link bib-link" data-bib="papers/2018/ASetAl_ENASE_2018.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
             <p>
             Sahar Kallel, <b>Chouki Tibermacine</b>, Christophe Dony and Ahmed Hadj Kacem. <i>Multi-Paradigm Architecture Constraint Specification & Configuration Based on Graphs and Feature Models</i>. In proceedings of the 44th International Conference on Current Trends
 in Theory and Practice of Computer Science (SOFSEM'18), Track on Software Engineering: Advanced Methods, Applications, and Tools (SEMAT), January-February 2018, Krems an der Donau, Austria. Springer. Acceptance rate: 28%.
-            <a href="papers/2018/SKetAl_SOFSEM_2018.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2018/SKetAl_SOFSEM_2018.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+            <a href="papers/2018/SKetAl_SOFSEM_2018.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2018/SKetAl_SOFSEM_2018.bib" class="paper-link bib-link" data-bib="papers/2018/SKetAl_SOFSEM_2018.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
 
 
@@ -504,39 +428,21 @@ in Theory and Practice of Computer Science (SOFSEM'18), Track on Software Engine
                 towards a better Decoupling and Instantiation Unanticipation</i>. 
                 In proceedings of the International Conference on Software Engineering and Knowledge Engineering <a href="https://ksiresearchorg.ipage.com/seke/seke17.html"
                 target="_blank">SEKE'17</a>, Pittsburgh, PA, USA, July 5-7, 2017, Pages 450--455
-                <a href="papers/2017/SZetAl_SEKE_2017.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2017/SZetAl_SEKE_2017.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+                <a href="papers/2017/SZetAl_SEKE_2017.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2017/SZetAl_SEKE_2017.bib" class="paper-link bib-link" data-bib="papers/2017/SZetAl_SEKE_2017.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
                 </p>
 
                 <p>Sahar Kallel, Bastien Tramoni, <b>Chouki Tibermacine</b>, Christophe Dony and Ahmed Hadj Kacem. <i>Generating Reusable, Searchable and Executable 
                 "Architecture Constraints as Services"</i>. In the <a href="http://www.sciencedirect.com/journal/journal-of-systems-and-software/" target="_blank">Journal 
                 of Systems and Software</a>, Volume 127, February 2017. Pages 91-108. Elsevier.
-                <a href="papers/2017/SKetAl_JSS_2017.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2017/SKetAl_JSS_2017.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+                <a href="papers/2017/SKetAl_JSS_2017.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2017/SKetAl_JSS_2017.bib" class="paper-link bib-link" data-bib="papers/2017/SKetAl_JSS_2017.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
                 </p>   
                 <p>Amina Bekkouche, Sidi Mohammed Benslimane, Marianne Huchard, <b>Chouki Tibermacine</b>, Fethallah Hedjila and Mohammed Merzoug. 
                 QoS-Aware Optimal and Automated Semantic Web Service Composition With User's Constraints. In Journal of
                 <a href="http://link.springer.com/journal/11761" target="_blank">Service-Oriented Computing and Applications</a>, February 2017. Springer.
-                <a href="papers/2017/ABetAl_SOCA_2017.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2017/ABetAl_SOCA_2017.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>  
+                <a href="papers/2017/ABetAl_SOCA_2017.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2017/ABetAl_SOCA_2017.bib" class="paper-link bib-link" data-bib="papers/2017/ABetAl_SOCA_2017.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>  
                 </p>
 
                 <div class="publication-year">2016</div>
@@ -552,37 +458,19 @@ in Theory and Practice of Computer Science (SOFSEM'18), Track on Software Engine
                 <p><b>Chouki Tibermacine</b>, Salah Sadou, Minh Tu Ton That and Christophe Dony. Software Architecture Constraint Reuse-by-Composition.
                 In the Journal of <a href="http://www.sciencedirect.com/journal/future-generation-computer-systems/" target="_blank">Future Generation Computer Systems</a>, 
                 Volume 61, August 2016, Pages 37-53. Elsevier.
-                <a href="papers/2016/CTetAl_FGCS_2016.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2016/CTetAl_FGCS_2016.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+                <a href="papers/2016/CTetAl_FGCS_2016.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2016/CTetAl_FGCS_2016.bib" class="paper-link bib-link" data-bib="papers/2016/CTetAl_FGCS_2016.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
                 </p>
                 <p>Mohamed Lamine Kerdoudi, <b>Chouki Tibermacine</b> and Salah Sadou. Opening Web Applications for Third Party Development: a Service-Oriented Solution.
                 In the Journal of <a href="http://link.springer.com/journal/11761" target="_blank">Service-Oriented Computing and Applications</a>, February 2016, Pages 1-27. Springer.
-                <a href="papers/2016/MLKetAl_SOCA_2016.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2016/MLKetAl_SOCA_2016.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+                <a href="papers/2016/MLKetAl_SOCA_2016.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2016/MLKetAl_SOCA_2016.bib" class="paper-link bib-link" data-bib="papers/2016/MLKetAl_SOCA_2016.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
                 </p>
                 <p>Tarek Zernadji, <b>Chouki Tibermacine</b>, Foudil Cherif and Amina Zouioueche. Integrating Quality Requirements in Engineering Web Service Orchestrations. 
                 In the <a href="https://www.sciencedirect.com/journal/journal-of-systems-and-software" target="_blank">Journal of Systems and Software</a>, Volume 122, December 2016. 
                 Pages 463-483. Elsevier.
-                <a href="papers/2016/TZetAl_JSS_2016.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-                OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-                <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-                <a href="javascript:open_win('papers/2016/TZetAl_JSS_2016.bib')"
-                OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-                OnMouseOut="window.status=''; return true">
-                <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-                title="BibTex Entry"/></a>
+                <a href="papers/2016/TZetAl_JSS_2016.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+                <a href="papers/2016/TZetAl_JSS_2016.bib" class="paper-link bib-link" data-bib="papers/2016/TZetAl_JSS_2016.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
                 </p>               
             
             <div class="publication-year">2015</div>
@@ -590,14 +478,8 @@ in Theory and Practice of Computer Science (SOFSEM'18), Track on Software Engine
             <p>Zakarea Alshara, Abdelhak-Djamel Seriai, <b>Chouki Tibermacine</b>, Hinde Lilia Bouziane,  Christophe Dony and Anas Shatnawi.
             Migrating Large Object-oriented Applications into Component-based ones: Instantiation and Inheritance Transformation.
             In proceedings of the 14th International Conference on Generative Programming: Concepts & Experience (GPCE'15), 
-            Pittsburgh, PA, USA, October 2015. ACM Press. <a href="papers/2015/ZAetAl_GPCE_2015.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-            OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-            <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-            <a href="javascript:open_win('papers/2015/ZAetAl_GPCE_2015.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-            OnMouseOut="window.status=''; return true">
-            <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-            title="BibTex Entry"/></a>
+            Pittsburgh, PA, USA, October 2015. ACM Press. <a href="papers/2015/ZAetAl_GPCE_2015.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+            <a href="papers/2015/ZAetAl_GPCE_2015.bib" class="paper-link bib-link" data-bib="papers/2015/ZAetAl_GPCE_2015.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
             <p>Sahar Kallel, Bastien Tramoni, <b>Chouki Tibermacine</b>, Christophe Dony and Ahmed Hadj Kacem. <i>Automatic Translation of Architecture
             Constraint Specifications into Components</i>. In Proceedings of the 9th European Conference on Software Architecture 
@@ -615,28 +497,16 @@ in Theory and Practice of Computer Science (SOFSEM'18), Track on Software Engine
             <p>Sahar Kallel, <b>Chouki Tibermacine</b>, Bastien Tramoni, Christophe Dony and Ahmed Hadj Kacem.<i> Automatic Translation of OCL Meta-Level Constraints 
             into Java Meta-programs</i>. In Proceedings of the 14th International Conference on Software Engineering 
             Research, Management and Applications (SERA'15), Hammamet, Tunisia, May 2015. Acceptance rate: 27%.
-            <a href="papers/2015/SKetAl_SERA_2015.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-            OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-            <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-            <a href="javascript:open_win('papers/2015/SKetAl_SERA_2015.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-            OnMouseOut="window.status=''; return true">
-            <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-            title="BibTex Entry"/></a>
+            <a href="papers/2015/SKetAl_SERA_2015.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+            <a href="papers/2015/SKetAl_SERA_2015.bib" class="paper-link bib-link" data-bib="papers/2015/SKetAl_SERA_2015.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             <br/>
             A french version, which has been published in proceedings of CIEL'14, is available <a href="#ciel14">below</a>.
             </p>
             <p><a id="cal15">Sahar</a> Kallel, <b>Chouki Tibermacine</b>, Bastien Tramoni, Christophe Dony and Ahmed Hadj Kacem.<i> Traduction de sp&eacute;cifications 
             de contraintes d'architecture en composants ex&eacute;cutables</i>. In proceedings of the French-speaking conference on Software
             Architecture (CAL'15), Hammamet, Tunisia, May 2015.
-            <a href="papers/2015/SKetAl_CAL_2015.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-            OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-            <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-            <a href="javascript:open_win('papers/2015/SKetAl_CAL_2015.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-            OnMouseOut="window.status=''; return true">
-            <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-            title="BibTex Entry"/></a>
+            <a href="papers/2015/SKetAl_CAL_2015.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+            <a href="papers/2015/SKetAl_CAL_2015.bib" class="paper-link bib-link" data-bib="papers/2015/SKetAl_CAL_2015.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
 
             <div class="publication-year">2014</div>
@@ -646,48 +516,24 @@ in Theory and Practice of Computer Science (SOFSEM'18), Track on Software Engine
             In proceedings of the 17th International ACM SIGSOFT Symposium on
     Component-Based Software Engineering (CBSE'14), Lille, France, June-July
       2014. ACM Press. Acceptance rate: 23%. <b>ACM SIGSOFT Distinguished Paper Award</b>
-      <a href="papers/2014/PSetAl_CBSE_2014.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-            OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-            <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-            <a href="javascript:open_win('papers/2014/PSetAl_CBSE_2014.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-            OnMouseOut="window.status=''; return true">
-            <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-            title="BibTex Entry"/></a>
+      <a href="papers/2014/PSetAl_CBSE_2014.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+            <a href="papers/2014/PSetAl_CBSE_2014.bib" class="paper-link bib-link" data-bib="papers/2014/PSetAl_CBSE_2014.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
 
             <p><a id="ciel14">Sahar</a> Kallel, <b>Chouki Tibermacine</b>, Mohamed Reda Skay, Christophe Dony and Ahmed Hadj Kacem. G&eacute;n&eacute;ration de m&eacute;ta-programmes 
             Java &agrave; partir de contraintes d'architecture
             OCL. In proceedings of the french speaking conference on software engineering (CIEL'14). Paris, France, June 2014.
-            <a href="papers/2014/SKetAl_CIEL_2014.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-            OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-            <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-            <a href="javascript:open_win('papers/2014/SKetAl_CIEL_2014.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-            OnMouseOut="window.status=''; return true">
-            <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-            title="BibTex Entry"/></a>
+            <a href="papers/2014/SKetAl_CIEL_2014.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+            <a href="papers/2014/SKetAl_CIEL_2014.bib" class="paper-link bib-link" data-bib="papers/2014/SKetAl_CIEL_2014.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>   
 
     <p><b>Chouki Tibermacine</b>. <i>Software Architecture: Architecture Constraints</i>. A book chapter in "Software Architecture: principles, techniques and tools", edited by Mourad Oussalah and published by John Wiley & Sons 2014. ISBN 9781848216884, New York, USA.
-    <a href="papers/2014/CT_ChapterOussalah_2014.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-            OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-            <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-            <a href="javascript:open_win('papers/2014/CT_ChapterOussalah_2014.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-            OnMouseOut="window.status=''; return true">
-            <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-            title="BibTex Entry"/></a>
+    <a href="papers/2014/CT_ChapterOussalah_2014.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+            <a href="papers/2014/CT_ChapterOussalah_2014.bib" class="paper-link bib-link" data-bib="papers/2014/CT_ChapterOussalah_2014.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
 
     <br/>A french version is available in "Architectures logicielles : Principes, techniques et outils", edited by Mourad Oussalah and published by Hermes Sciences-Lavoisier 2013. ISBN 9782746245174, Paris, France.
-    <a href="papers/2013/CT_ChapterOussalah_2013.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-            OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-            <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-            <a href="javascript:open_win('papers/2013/CT_ChapterOussalah_2013.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-            OnMouseOut="window.status=''; return true">
-            <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-            title="BibTex Entry"/></a>
+    <a href="papers/2013/CT_ChapterOussalah_2013.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+            <a href="papers/2013/CT_ChapterOussalah_2013.bib" class="paper-link bib-link" data-bib="papers/2013/CT_ChapterOussalah_2013.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
         
             </p>
         
@@ -697,40 +543,22 @@ in Theory and Practice of Computer Science (SOFSEM'18), Track on Software Engine
               short paper in proceedings of the 11th Working IEEE/IFIP Conference
               on Software Architecture (<a href="http://wicsa2014.org/" target="_blank">WICSA'14</a>), Sydney, Australia, April
               2014. IEEE Computer Society Press. 
-              <a href="papers/2014/TZetAl_WICSA_2014.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-            OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-            <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-            <a href="javascript:open_win('papers/2014/TZetAl_WICSA_2014.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-            OnMouseOut="window.status=''; return true">
-            <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-            title="BibTex Entry"/></a>
+              <a href="papers/2014/TZetAl_WICSA_2014.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+            <a href="papers/2014/TZetAl_WICSA_2014.bib" class="paper-link bib-link" data-bib="papers/2014/TZetAl_WICSA_2014.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
 
             <p>
             Tarek Zernadji, <b>Chouki Tibermacine</b>, R&eacute;gis Fleurquin and Salah Sadou. <i>Assistance &agrave; l'&eacute;volution du logiciel dirig&eacute;e par la qualit&eacute;</i>.
-            A book chapter written in French in "<a href="http://www.lavoisier.fr/livre/informatique/evolution-et-maintenance-des-systemes-logiciels/seriai/descriptif-9782746245549" target="_blank">&Eacute;volution et maintenance des syst&egrave;mes logiciels</a>", edited by Abdelhak-Djamel Seriai and published by Hermes Sciences-Lavoisier 2014. ISBN 9782746245549, Paris, France. <a href="papers/2014/TZetAl_ChapitreSeriai_2014.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-            OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-            <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-            <a href="javascript:open_win('papers/2014/TZetAl_ChapitreSeriai_2014.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-            OnMouseOut="window.status=''; return true">
-            <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-            title="BibTex Entry"/></a>
+            A book chapter written in French in "<a href="http://www.lavoisier.fr/livre/informatique/evolution-et-maintenance-des-systemes-logiciels/seriai/descriptif-9782746245549" target="_blank">&Eacute;volution et maintenance des syst&egrave;mes logiciels</a>", edited by Abdelhak-Djamel Seriai and published by Hermes Sciences-Lavoisier 2014. ISBN 9782746245549, Paris, France. <a href="papers/2014/TZetAl_ChapitreSeriai_2014.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+            <a href="papers/2014/TZetAl_ChapitreSeriai_2014.bib" class="paper-link bib-link" data-bib="papers/2014/TZetAl_ChapitreSeriai_2014.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>   
         
             <p>Okba Tibermacine, <b>Chouki Tibermacine</b> and Foudil Cherif. <i>A Practical Approach to the Measurement 
             of Similarity between WSDL-based Web Services</i>. In (<a href="http://www.editions-rnti.fr/?inprocid=1002037" 
             target="_blank">RNTI</a>) (French-Speaking Journal: Revue des Nouvelles Technologies 
             de l'Information), special issue of selected papers from CAL 2013, volume RNTI-L-7, 2014, Pages 3-18.   
-            <a href="papers/2014/OTetAl_RNTI_2014.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-            OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-            <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-            <a href="javascript:open_win('papers/2014/OTetAl_RNTI_2014.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-            OnMouseOut="window.status=''; return true">
-            <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-            title="BibTex Entry"/></a>
+            <a href="papers/2014/OTetAl_RNTI_2014.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+            <a href="papers/2014/OTetAl_RNTI_2014.bib" class="paper-link bib-link" data-bib="papers/2014/OTetAl_RNTI_2014.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
 
         <div class="publication-year">2013</div>
@@ -739,26 +567,14 @@ in Theory and Practice of Computer Science (SOFSEM'18), Track on Software Engine
             Thibaut Possomp&egrave;s, Christophe Dony, Marianne Huchard and <b>Chouki Tibermacine</b>.
             <i>Model-Driven Generation of Context-Specific Feature Models</i>. In proceedings 
             of the 25th International Conference on Software Engineering and Knowledge Engineering (SEKE'13), Boston, Massachusetts, USA, June 2013. Acceptance rate: 29%.
-            <a href="papers/2013/TPetAl_SEKE_2013.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-            OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-            <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-            <a href="javascript:open_win('papers/2013/TPetAl_SEKE_2013.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-            OnMouseOut="window.status=''; return true">
-            <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-            title="BibTex Entry"/></a>
+            <a href="papers/2013/TPetAl_SEKE_2013.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+            <a href="papers/2013/TPetAl_SEKE_2013.bib" class="paper-link bib-link" data-bib="papers/2013/TPetAl_SEKE_2013.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
             <p>Okba Tibermacine, <b>Chouki Tibermacine</b> and Foudil Cherif. <i>WSSim: a Tool for the Measurement of Web Service 
             Interface Similarity</i>. In proceedings of the french-speaking conference on Software Architectures 
             (CAL'13), Toulouse, France. May 2013.
-            <a href="papers/2013/OTetAl_CAL_2013.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-            OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-            <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-            <a href="javascript:open_win('papers/2013/OTetAl_CAL_2013.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-            OnMouseOut="window.status=''; return true">
-            <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-            title="BibTex Entry"/></a>
+            <a href="papers/2013/OTetAl_CAL_2013.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+            <a href="papers/2013/OTetAl_CAL_2013.bib" class="paper-link bib-link" data-bib="papers/2013/OTetAl_CAL_2013.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
 
             <div class="publication-year">2012</div>
@@ -768,30 +584,14 @@ in Theory and Practice of Computer Science (SOFSEM'18), Track on Software Engine
             & Behavioral Reuse in Component-based Software Programming</i>. In proceedings of the 11th International 
             Conference on Generative Programming and Component Engineering (<a href="http://program-transformation.org/GPCE12" 
             target="_blank">GPCE'12</a>), Dresden, Germany, September 2012. ACM Press. 
-            <a href="papers/2012/PSetAl_GPCE_2012.pdf" OnMouseOver="window.status='Click here to get the PDF file'; return true"
-            OnMouseOut="window.status=''; return true" class="link" alt="PDF File" title="PDF File">
-            <img src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27" length="22"/></a> 
-            <a href="javascript:open_win('papers/2012/PSetAl_GPCE_2012.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry'; return true" 
-            OnMouseOut="window.status=''; return true">
-            <img src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23" length="18" alt="BibTex Entry" 
-            title="BibTex Entry"/></a></p>
+            <a href="papers/2012/PSetAl_GPCE_2012.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> 
+            <a href="papers/2012/PSetAl_GPCE_2012.bib" class="paper-link bib-link" data-bib="papers/2012/PSetAl_GPCE_2012.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a></p>
 
             <p><b>Chouki Tibermacine</b> and Mohamed Lamine Kerdoudi. 
             <i class="titlePublis">Migrating Component-based Web Applications to Web Services: towards considering a "Web Interface as a Service"</i>. 
             In proceedings of the 10th IEEE International Conference on Web Services (ICWS'12), 
             Research Track, Honolulu, Hawaii, USA, June 2012. IEEE Computer Society. Acceptance rate: 17%.
-            <a href="papers/2012/CT_MLK_ICWS_2012.pdf"
-            OnMouseOver="window.status='Click here to get the PDF file'; return
-            true" OnMouseOut="window.status=''; return true"
-            class="link" alt="PDF File" title="PDF File"><img
-            src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27"
-            length="22"/></a> <a
-            href="javascript:open_win('papers/2012/CT_MLK_ICWS_2012.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry';
-            return true" OnMouseOut="window.status=''; return true"><img
-            src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23"
-            length="18" alt="BibTex Entry" title="BibTex Entry"/></a></p>
+            <a href="papers/2012/CT_MLK_ICWS_2012.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> <a href="papers/2012/CT_MLK_ICWS_2012.bib" class="paper-link bib-link" data-bib="papers/2012/CT_MLK_ICWS_2012.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a></p>
 
             <div class="publication-year">2011</div>
 
@@ -801,17 +601,7 @@ in Theory and Practice of Computer Science (SOFSEM'18), Track on Software Engine
             Orchestrations using Quality Requirements</i>. 
             In proceedings of the 5th European Conference on Software Architecture (ECSA'11), 
             Essen, Germany, September 2011. Springer-Verlag. Acceptance rate: 22%.
-            <a href="papers/2011/CT_TZ_ECSA_2011.pdf"
-            OnMouseOver="window.status='Click here to get the PDF file'; return
-            true" OnMouseOut="window.status=''; return true"
-            class="link" alt="PDF File" title="PDF File"><img
-            src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27"
-            length="22"/></a> <a
-            href="javascript:open_win('papers/2011/CT_TZ_ECSA_2011.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry';
-            return true" OnMouseOut="window.status=''; return true"><img
-            src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23"
-            length="18" alt="BibTex Entry" title="BibTex Entry"/></a>
+            <a href="papers/2011/CT_TZ_ECSA_2011.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> <a href="papers/2011/CT_TZ_ECSA_2011.bib" class="paper-link bib-link" data-bib="papers/2011/CT_TZ_ECSA_2011.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
 
             <p>
@@ -819,51 +609,21 @@ in Theory and Practice of Computer Science (SOFSEM'18), Track on Software Engine
             <i class="titlePublis">Selection of Composable Web Services Driven by User Requirements</i>. 
             In proceedings of the 9th IEEE International Conference on Web Services (ICWS'11), 
             Applications and Experiences Track, Washington DC, USA, July 2011. IEEE Computer Society. Acceptance rate: 11%.
-            <a href="papers/2011/ZAetAl_ICWS_2011.pdf"
-            OnMouseOver="window.status='Click here to get the PDF file'; return
-            true" OnMouseOut="window.status=''; return true"
-            class="link" alt="PDF File" title="PDF File"><img
-            src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27"
-            length="22"/></a> <a
-            href="javascript:open_win('papers/2011/ZAetAl_ICWS_2011.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry';
-            return true" OnMouseOut="window.status=''; return true"><img
-            src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23"
-            length="18" alt="BibTex Entry" title="BibTex Entry"/></a>
+            <a href="papers/2011/ZAetAl_ICWS_2011.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> <a href="papers/2011/ZAetAl_ICWS_2011.bib" class="paper-link bib-link" data-bib="papers/2011/ZAetAl_ICWS_2011.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
             <p>
             Thibaut Possomp&egrave;s, Christophe Dony, Marianne Huchard and <b>Chouki Tibermacine</b>.
             <i class="titlePublis">Design of a UML Profile for Feature Diagrams and its Tooling Implementation</i>.
             In proceedings of the 23rd International Conference on Software Engineering and Knowledge Engineering 
             (SEKE'11), Miami Beach, Florida, USA, July 2011. Acceptance rate: 31%.
-            <a href="papers/2011/TPetAl_SEKE_2011.pdf"
-            OnMouseOver="window.status='Click here to get the PDF file'; return
-            true" OnMouseOut="window.status=''; return true"
-            class="link" alt="PDF File" title="PDF File"><img
-            src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27"
-            length="22"/></a> <a
-            href="javascript:open_win('papers/2011/TPetAl_SEKE_2011.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry';
-            return true" OnMouseOut="window.status=''; return true"><img
-            src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23"
-            length="18" alt="BibTex Entry" title="BibTex Entry"/></a>
+            <a href="papers/2011/TPetAl_SEKE_2011.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> <a href="papers/2011/TPetAl_SEKE_2011.bib" class="paper-link bib-link" data-bib="papers/2011/TPetAl_SEKE_2011.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
             <p>
             Zeina Azmeh, Jean-R&eacute;my Falleri, Marianne Huchard and <b>Chouki Tibermacine</b>. 
             <i class="titlePublis">Automatic Web Service Tagging Using Machine Learning and WordNet Synsets</i>. 
             In Lecture Notes in Business Information Processing (<a href="http://www.springer.com/series/7911" class="link">LNBIP</a>) series, 
             Volume 75, June 2011, Springer-Verlag.
-            <a href="papers/2011/ZAetAl_LNBIP_2011.pdf"
-            OnMouseOver="window.status='Click here to get the PDF file'; return
-            true" OnMouseOut="window.status=''; return true"
-            class="link" alt="PDF File" title="PDF File"><img
-            src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27"
-            length="22"/></a> <a
-            href="javascript:open_win('papers/2011/ZAetAl_LNBIP_2011.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry';
-            return true" OnMouseOut="window.status=''; return true"><img
-            src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23"
-            length="18" alt="BibTex Entry" title="BibTex Entry"/></a>
+            <a href="papers/2011/ZAetAl_LNBIP_2011.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> <a href="papers/2011/ZAetAl_LNBIP_2011.bib" class="paper-link bib-link" data-bib="papers/2011/ZAetAl_LNBIP_2011.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
 
             <p>
@@ -871,66 +631,26 @@ in Theory and Practice of Computer Science (SOFSEM'18), Track on Software Engine
             <i class="titlePublis">Component-based Specification of Software Architecture Constraints</i>. 
             In proceedings of the 14th International ACM SIGSOFT Symposium on Component-Based Software Engineering 
             (CBSE'11), Boulder, Colorado, USA, June
-            2011. ACM Press. Acceptance rate: 29%. <b>ACM SIGSOFT Distinguished Paper Award</b>. <a href="papers/2011/CTetAl_CBSE_2011.pdf"
-            OnMouseOver="window.status='Click here to get the PDF file'; return
-            true" OnMouseOut="window.status=''; return true"
-            class="link" alt="PDF File" title="PDF File"><img
-            src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27"
-            length="22"/></a> <a
-            href="javascript:open_win('papers/2011/CTetAl_CBSE_2011.bib')"
-            OnMouseOver="window.status='Click here to get the BibTex entry';
-            return true" OnMouseOut="window.status=''; return true"><img
-            src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23"
-            length="18" alt="BibTex Entry" title="BibTex Entry"/></a>
+            2011. ACM Press. Acceptance rate: 29%. <b>ACM SIGSOFT Distinguished Paper Award</b>. <a href="papers/2011/CTetAl_CBSE_2011.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> <a href="papers/2011/CTetAl_CBSE_2011.bib" class="paper-link bib-link" data-bib="papers/2011/CTetAl_CBSE_2011.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
             </p>
 
             <div class="publication-year">2010 and before</div>
 
     <p>
     <b>Chouki Tibermacine</b>, R&eacute;gis Fleurquin and Salah Sadou. 
-    <i class="titlePublis">A Family of Languages for Architecture Constraint Specification</i>. In Journal of Systems and Software (<a href="https://www.sciencedirect.com/journal/journal-of-systems-and-software" target="_blank">JSS</a>), Volume 83, Number 5, Elsevier. 2010. <a href="papers/2009/CTetAl_JSS_2009.pdf"
-    OnMouseOver="window.status='Click here to get the PDF file'; return
-    true" OnMouseOut="window.status=''; return true"
-    class="link" alt="PDF File" title="PDF File"><img
-    src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27"
-    length="22"/></a> <a
-    href="javascript:open_win('papers/2009/CTetAl_JSS_2009.bib')"
-    OnMouseOver="window.status='Click here to get the BibTex entry';
-    return true" OnMouseOut="window.status=''; return true"><img
-    src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23"
-    length="18" alt="BibTex Entry" title="BibTex Entry"/></a>
+    <i class="titlePublis">A Family of Languages for Architecture Constraint Specification</i>. In Journal of Systems and Software (<a href="https://www.sciencedirect.com/journal/journal-of-systems-and-software" target="_blank">JSS</a>), Volume 83, Number 5, Elsevier. 2010. <a href="papers/2009/CTetAl_JSS_2009.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> <a href="papers/2009/CTetAl_JSS_2009.bib" class="paper-link bib-link" data-bib="papers/2009/CTetAl_JSS_2009.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
     </p>
     <p>
     Nour Alhouda Aboud, Gabriela Ar&eacute;valo, Jean-R&eacute;my Falleri, Marianne Huchard, <b>Chouki Tibermacine</b>, Christelle Urtado and Sylvain Vauttier. 
     <i class="titlePublis">Automated architectural component classification using concept lattices</i>. In proceedings of the Joint Working IEEE/IFIP Conference on Software Architecture 2009 (WICSA'09) & European Conference on Software Architecture 2009 (ECSA'09), Cambridge, UK, September
-    2009. IEEE Computer Society Press. Acceptance rate: 27%. <a href="papers/2009/NAetAl_WICSA_2009.pdf"
-    OnMouseOver="window.status='Click here to get the PDF file'; return
-    true" OnMouseOut="window.status=''; return true"
-    class="link" alt="PDF File" title="PDF File"><img
-    src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27"
-    length="22"/></a> <a
-    href="javascript:open_win('papers/2009/NAetAl_WICSA_2009.bib')"
-    OnMouseOver="window.status='Click here to get the BibTex entry';
-    return true" OnMouseOut="window.status=''; return true"><img
-    src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23"
-    length="18" alt="BibTex Entry" title="BibTex Entry"/></a>
+    2009. IEEE Computer Society Press. Acceptance rate: 27%. <a href="papers/2009/NAetAl_WICSA_2009.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> <a href="papers/2009/NAetAl_WICSA_2009.bib" class="paper-link bib-link" data-bib="papers/2009/NAetAl_WICSA_2009.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
     </p>
     <p>
     Zeina Azmeh, Marianne Huchard, <b>Chouki Tibermacine</b>, Christelle Urtado and Sylvain Vauttier. 
     <i class="titlePublis">WSPAB: A Tool for Automatic Classification & Selection of Web Services 
     Using Formal Concept Analysis</i>. In proceedings of the
     6th IEEE European Conference on Web Services (ECOWS'08), Dublin, Ireland, November
-    2008. IEEE Computer Society Press. Acceptance rate: approx. 30%. <a href="papers/2008/ZAetAl_ECOWS_2008.pdf"
-    OnMouseOver="window.status='Click here to get the PDF file'; return
-    true" OnMouseOut="window.status=''; return true"
-    class="link" alt="PDF File" title="PDF File"><img
-    src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27"
-    length="22"/></a> <a
-    href="javascript:open_win('papers/2008/ZAetAl_ECOWS_2008.bib')"
-    OnMouseOver="window.status='Click here to get the BibTex entry';
-    return true" OnMouseOut="window.status=''; return true"><img
-    src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23"
-    length="18" alt="BibTex Entry" title="BibTex Entry"/></a>
+    2008. IEEE Computer Society Press. Acceptance rate: approx. 30%. <a href="papers/2008/ZAetAl_ECOWS_2008.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> <a href="papers/2008/ZAetAl_ECOWS_2008.bib" class="paper-link bib-link" data-bib="papers/2008/ZAetAl_ECOWS_2008.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a>
     </p>
     <p>
     <b>Chouki Tibermacine</b>, Didier Hoareau and Reda Kadri. <i
@@ -940,18 +660,7 @@ in Theory and Practice of Computer Science (SOFSEM'18), Track on Software Engine
     Engineering (<a href="http://fase07.di.fc.ul.pt/"
     target="_blank">FASE'07</a>), Braga, Portugal, March-April
     2007. Pages 140 - 154. LNCS 4422, Springer-Verlag. Acceptance rate:
-    22%.<a
-    href="papers/2007/CTetAl_FASE_2007.pdf"
-    OnMouseOver="window.status='Click here to get the PDF file'; return
-    true" OnMouseOut="window.status=''; return true"
-    class="link" alt="PDF File" title="PDF File"><img
-    src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27"
-    length="22"/></a> <a
-    href="javascript:open_win('papers/2007/CTetAl_FASE_2007.bib')"
-    OnMouseOver="window.status='Click here to get the BibTex entry';
-    return true" OnMouseOut="window.status=''; return true"><img
-    src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23"
-    length="18" alt="BibTex Entry" title="BibTex Entry"/></a> </p>
+    22%.<a href="papers/2007/CTetAl_FASE_2007.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> <a href="papers/2007/CTetAl_FASE_2007.bib" class="paper-link bib-link" data-bib="papers/2007/CTetAl_FASE_2007.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a> </p>
 
     <p><b>Chouki Tibermacine</b>, R&eacute;gis Fleurquin and Salah
     Sadou. <i class="titlePublis">On-Demand Quality-Oriented Assistance in
@@ -959,17 +668,7 @@ in Theory and Practice of Computer Science (SOFSEM'18), Track on Software Engine
     SIGSOFT International Symposium on Component-Based Software
     Engineering (CBSE'06), V&auml;ster&aring;s, Sweden, June
     2006. Pages 294 - 309, LNCS 4063, Springer-Verlag. Acceptance rate:
-    29% <a href="papers/2006/CTetAl_CBSE_2006.pdf"
-    OnMouseOver="window.status='Click here to get the PDF file'; return
-    true" OnMouseOut="window.status=''; return true"
-    class="link" alt="PDF File" title="PDF File"><img
-    src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27"
-    length="22"/></a> <a
-    href="javascript:open_win('papers/2006/CTetAl_CBSE_2006.bib')"
-    OnMouseOver="window.status='Click here to get the BibTex entry';
-    return true" OnMouseOut="window.status=''; return true"><img
-    src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23"
-    length="18" alt="BibTex Entry" title="BibTex Entry"/></a> </p>
+    29% <a href="papers/2006/CTetAl_CBSE_2006.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> <a href="papers/2006/CTetAl_CBSE_2006.bib" class="paper-link bib-link" data-bib="papers/2006/CTetAl_CBSE_2006.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a> </p>
 
     <p><b>Chouki Tibermacine</b>, R&eacute;gis Fleurquin and Salah
     Sadou. <i class="titlePublis">Simplifying Transformations of Software
@@ -978,17 +677,7 @@ in Theory and Practice of Computer Science (SOFSEM'18), Track on Software Engine
     href="https://www.sigapp.org/sac/sac2006/"
     target="_blank">SAC'06</a>), Track on Model Transformation, Dijon,
     France, April 2006. Pages 1240 - 1244, ACM Press. Acceptance rate: 32%
-    <a href="papers/2006/CTetAl_MT_SAC_2006.pdf"
-    OnMouseOver="window.status='Click here to get the PDF file'; return
-    true" OnMouseOut="window.status=''; return true"
-    class="link" alt="PDF File" title="PDF File"><img
-    src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27"
-    length="22"/></a> <a
-    href="javascript:open_win('papers/2006/CTetAl_MT_SAC_2006.bib')"
-    OnMouseOver="window.status='Click here to get the BibTex entry';
-    return true" OnMouseOut="window.status=''; return true"><img
-    src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23"
-    length="18" alt="BibTex Entry" title="BibTex Entry"/></a> </p>
+    <a href="papers/2006/CTetAl_MT_SAC_2006.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> <a href="papers/2006/CTetAl_MT_SAC_2006.bib" class="paper-link bib-link" data-bib="papers/2006/CTetAl_MT_SAC_2006.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a> </p>
 
     <p><b>Chouki Tibermacine</b>, R&eacute;gis Fleurquin and Salah
     Sadou. <i class="titlePublis">Preserving Architectural Choices
@@ -996,38 +685,61 @@ in Theory and Practice of Computer Science (SOFSEM'18), Track on Software Engine
     proceedings of the Working IEEE/IFIP Conference on Software
     Architecture (WICSA'05), Pittsburgh, Pennsylvania, November
     2005. Pages 121 - 130, IEEE Computer Society Press. Acceptance rate:
-    17% <a href="papers/2005/CTetAl_WICSA_2005.pdf"
-    OnMouseOver="window.status='Click here to get the PDF file'; return
-    true" OnMouseOut="window.status=''; return true"
-    class="link" alt="PDF File" title="PDF File"><img
-    src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27"
-    length="22"/></a> <a
-    href="javascript:open_win('papers/2005/CTetAl_WICSA_2005.bib')"
-    OnMouseOver="window.status='Click here to get the BibTex entry';
-    return true" OnMouseOut="window.status=''; return true"><img
-    src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23"
-    length="18" alt="BibTex Entry" title="BibTex Entry"/></a> </p>
+    17% <a href="papers/2005/CTetAl_WICSA_2005.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> <a href="papers/2005/CTetAl_WICSA_2005.bib" class="paper-link bib-link" data-bib="papers/2005/CTetAl_WICSA_2005.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a> </p>
 
     <p><b>Chouki Tibermacine</b>, R&eacute;gis Fleurquin and Salah
     Sadou. <i class="titlePublis">NFRs-Aware Architectural Evolution of
     Component-based Software</i>. A short paper in proceedings of the 20th
     IEEE/ACM International Conference on Automated Software Engineering
     (ASE'05), Long Beach, California, November
-    2005. Pages 388 - 391, ACM Press. Acceptance rate: 22% <a
-    href="papers/2005/CTetAl_ASE_2005.pdf"
-    OnMouseOver="window.status='Click here to get the PDF file'; return
-    true" OnMouseOut="window.status=''; return true"
-    class="link" alt="PDF File" title="PDF File"><img
-    src="img/pdf_ico.jpg" style="vertical-align: middle" border="0" width="27"
-    length="22"/></a> <a
-    href="javascript:open_win('papers/2005/CTetAl_ASE_2005.bib')"
-    OnMouseOver="window.status='Click here to get the BibTex entry';
-    return true" OnMouseOut="window.status=''; return true"><img
-    src="img/bibtex_ico.jpg" style="vertical-align: middle" border="0" width="23"
-    length="18" alt="BibTex Entry" title="BibTex Entry"/></a> </p>
+    2005. Pages 388 - 391, ACM Press. Acceptance rate: 22% <a href="papers/2005/CTetAl_ASE_2005.pdf" class="paper-link pdf-link" target="_blank" rel="noopener" title="PDF file"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>PDF</span></a> <a href="papers/2005/CTetAl_ASE_2005.bib" class="paper-link bib-link" data-bib="papers/2005/CTetAl_ASE_2005.bib" title="BibTeX entry"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3a3 3 0 0 0-3 3v1a2 2 0 0 1-2 2v2a2 2 0 0 1 2 2v1a3 3 0 0 0 3 3"/><path d="M18 3a3 3 0 0 1 3 3v1a2 2 0 0 0 2 2v2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3"/></svg><span>BibTeX</span></a> </p>
 
 
         </div>
     </div>
+
+    <dialog id="bib-modal">
+        <div class="bib-modal-header">
+            <h3>BibTeX entry</h3>
+            <button type="button" id="bib-modal-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="bib-modal-body">
+            <pre id="bib-modal-content">Loading…</pre>
+        </div>
+        <div class="bib-modal-actions">
+            <button type="button" id="bib-modal-copy">Copy to clipboard</button>
+        </div>
+    </dialog>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var modal = document.getElementById('bib-modal');
+            var content = document.getElementById('bib-modal-content');
+            var copyBtn = document.getElementById('bib-modal-copy');
+            var closeBtn = document.getElementById('bib-modal-close');
+
+            document.querySelectorAll('.bib-link').forEach(function (link) {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var bibPath = link.dataset.bib;
+                    content.textContent = 'Loading…';
+                    modal.showModal();
+                    fetch(bibPath)
+                        .then(function (res) { return res.text(); })
+                        .then(function (text) { content.textContent = text; })
+                        .catch(function () { content.textContent = 'Could not load BibTeX file.'; });
+                });
+            });
+
+            copyBtn.addEventListener('click', function () {
+                navigator.clipboard.writeText(content.textContent).then(function () {
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(function () { copyBtn.textContent = 'Copy to clipboard'; }, 1500);
+                });
+            });
+
+            closeBtn.addEventListener('click', function () { modal.close(); });
+        });
+    </script>
 </body>
 </html>
